@@ -1,0 +1,57 @@
+{
+  "name": "sinon-helpers",
+  "description": "Create stubs that mimic your constructors and keep track of their instances",
+  "author": "Lukas Taegert <lukas.taegert@tngtech.com>",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "lint": "eslint ."
+  },
+  "config": {
+    "ghooks": {
+      "pre-commit": "npm run lint",
+      "commit-msg": "validate-commit-msg",
+      "pre-push": "npm test",
+      "post-merge": "npm install && npm prune",
+      "post-rewrite": "npm install && npm prune"
+    },
+    "validate-commit-msg": {
+      "types": [
+        "feat",
+        "fix",
+        "docs",
+        "refactor",
+        "test",
+        "chore",
+        "revert"
+      ]
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lukastaegert/sinon-helpers.git"
+  },
+  "keywords": [
+    "sinon"
+  ],
+  "bugs": {
+    "url": "https://github.com/lukastaegert/sinon-helpers/issues"
+  },
+  "homepage": "https://github.com/lukastaegert/sinon-helpers#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "codecov": "^1.0.1",
+    "eslint-config-standard": "^6.0.0",
+    "eslint-plugin-standard": "^2.0.0",
+    "ghooks": "^1.3.2",
+    "istanbul": "^0.4.5",
+    "mocha": "^2.5.3",
+    "standard": "^8.0.0",
+    "testdouble": "^1.6.0",
+    "validate-commit-msg": "^2.8.0"
+  },
+  "dependencies": {
+    "ramda": "^0.22.1"
+  }
+}
