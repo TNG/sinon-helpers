@@ -10,6 +10,12 @@ Create [`sinon`](https://github.com/sinonjs/sinon) stubs that mimic your constru
 [![David](https://img.shields.io/david/dev/lukastaegert/sinon-helpers.svg?maxAge=3600)](https://david-dm.org/lukastaegert/sinon-helpers?type=dev)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?maxAge=3600)](https://github.com/semantic-release/semantic-release)
 
+## Usage
+
+```javascript
+var getStubConstructor = require('sinon-helpers').getStubConstructor
+```
+
 ## API
 
 ### `getStubConstructor(OriginalConstructor)`
@@ -23,8 +29,11 @@ The `StubConstructor` features several methods to add methods and query created 
 ### `StubConstructor` API
 A `StubConstructor` has the following methods:
 * `.withMethods('method1' <,'method2' <...>>)`  
-    *not yet implemented*  
-    Instances should have the listed additional methods as stubs.
+    Instances should have the listed additional methods as stubs. Returns the `StubConstructor` so you can assign
+    ```javascript
+    var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
+    ```
+    `.withMethods` also [allows you to specify method behavior](#specifying-stubconstructor-method-behavior), see below.
 * `.getInstances()`   
     Returns an array of instances created with the stub constructor.
 * `.getInstance()`  
@@ -39,3 +48,20 @@ A `StubConstructor` has the following methods:
 * `.getInstanceArgs(index)`  
     Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
     instance `index` has been created.
+
+### Specifying `StubConstructor` method behavior
+With the additional imports
+```javascript
+var returning = require('sinon-helpers').returning
+var returningThis = require('sinon-helpers').returningThis
+```
+you can specify return values for the created stub methods:
+```javascript
+var Stub = getStubConstructor(MyConstructor).withMethods(
+             'method1', returning(3),
+             'method2', returningThis,
+             'method3'
+           )
+```
+Creates a `StubConstructor` where any instance has the three methods `.method1()`, `.method2()` and `.method3()` and
+`.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`.
