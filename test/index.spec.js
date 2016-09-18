@@ -1,29 +1,16 @@
 var sinonHelpers = require('../index')
 var getStubConstructor = sinonHelpers.getStubConstructor
+var returning = sinonHelpers.returning
+var returningThis = sinonHelpers.returningThis
 
 var expect = require('chai').expect
-var td = require('testdouble')
-
-var sinon
-
-function createSinonTestDouble () {
-  sinon = td.object([ 'stub' ])
-  global.sinon = sinon
-  td.when(sinon.stub()).thenDo(sinonGetStub)
-}
-
-function sinonGetStub () {
-  var result = function () {}
-  result.isStub = true
-  return result
-}
+var sinon = require('sinon')
 
 beforeEach(function () {
-  createSinonTestDouble()
+  global.sinon = sinon
 })
 
 afterEach(function () {
-  td.reset()
   delete global.sinon
 })
 
@@ -61,6 +48,32 @@ describe('getStubConstructor', function () {
     var stubbedObject = new StubConstructor()
 
     expect(stubbedObject.field3).to.be.undefined
+  })
+
+  describe('withMethods', function () {
+    it('should allow specifying additional methods', function () {
+      StubConstructor = StubConstructor.withMethods('m1', 'm2')
+      var stubbedObject = new StubConstructor()
+
+      expect(stubbedObject.m1).to.be.a('function', 'm1')
+      expect(stubbedObject.m2).to.be.a('function', 'm2')
+    })
+
+    it('should allow specifying method return values', function () {
+      StubConstructor = StubConstructor.withMethods('m1', returning(1), 'm2', returning(2), 'm3')
+      var stubbedObject = new StubConstructor()
+
+      expect(stubbedObject.m1()).to.equal(1, 'm1')
+      expect(stubbedObject.m2()).to.equal(2, 'm2')
+      expect(stubbedObject.m3()).to.be.undefined
+    })
+
+    it('should allow for methods to return their this value', function () {
+      StubConstructor = StubConstructor.withMethods('m1', returningThis, 'm2', returningThis, 'm3')
+      var stubbedObject = new StubConstructor()
+
+      expect(stubbedObject.m1().m2().m3).to.be.a('function')
+    })
   })
 
   describe('getInstances', function () {
