@@ -60,19 +60,19 @@ describe('getStubConstructor', function () {
     })
 
     it('should allow specifying method return values', function () {
-      StubConstructor = StubConstructor.withMethods('m1', returning(1), 'm2', returning(2), 'm3')
+      StubConstructor = StubConstructor.withMethods('m1', returning(1), 'field1', returning(2), 'm2')
       var stubbedObject = new StubConstructor()
 
       expect(stubbedObject.m1()).to.equal(1, 'm1')
-      expect(stubbedObject.m2()).to.equal(2, 'm2')
-      expect(stubbedObject.m3()).to.be.undefined
+      expect(stubbedObject.field1()).to.equal(2, 'field1')
+      expect(stubbedObject.m2()).to.be.undefined
     })
 
     it('should allow for methods to return their this value', function () {
-      StubConstructor = StubConstructor.withMethods('m1', returningThis, 'm2', returningThis, 'm3')
+      StubConstructor = StubConstructor.withMethods('m1', returningThis, 'field1', returningThis, 'm2')
       var stubbedObject = new StubConstructor()
 
-      expect(stubbedObject.m1().m2().m3).to.be.a('function')
+      expect(stubbedObject.m1().field1().m2).to.be.a('function')
     })
   })
 

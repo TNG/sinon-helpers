@@ -63,5 +63,6 @@ var Stub = getStubConstructor(MyConstructor).withMethods(
              'method3'
            )
 ```
-Creates a `StubConstructor` where any instance has the three methods `.method1()`, `.method2()` and `.method3()` and
-`.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`.
+This creates a `StubConstructor` where any instance has the three methods `.method1()`, `.method2()` and `.method3()`.
+`.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`. This
+can also be used to add return values to prototype methods.
