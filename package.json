@@ -6,7 +6,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "config": {
     "ghooks": {
@@ -49,7 +50,8 @@
     "mocha": "^3.0.2",
     "standard": "^8.0.0",
     "testdouble": "^1.6.0",
-    "validate-commit-msg": "^2.8.0"
+    "validate-commit-msg": "^2.8.0",
+    "semantic-release": "^4.3.5"
   },
   "dependencies": {
     "ramda": "^0.22.1"

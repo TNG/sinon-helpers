@@ -12,11 +12,13 @@ node_js:
   - '6'
 before_install:
   - npm i -g npm@^2.0.0
-script:
-  - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
-  - codecov
 before_script:
   - npm prune
+after_success:
+  - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'
+  - python travis_after_all.py
+  - export $(cat .to_export_back) &> /dev/null
+  - npm run semantic-release
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
