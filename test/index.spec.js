@@ -7,8 +7,25 @@ var returningThis = sinonHelpers.returningThis
 var expect = require('chai').expect
 var sinon = require('sinon')
 
+var TestConstructor
+
 beforeEach(function () {
   global.sinon = sinon
+
+  var testPrototype2 = {
+    proto2: function () { return 'p2' }
+  }
+  var testPrototype1 = Object.create(testPrototype2, {
+    proto1: { writable: true, enumerable: false, value: function () { return 'p1' } }
+  })
+  var testPrototype = Object.create(testPrototype1, {
+    field1: { writable: true, enumerable: true, value: function () { return 1 } },
+    field2: { writable: true, enumerable: false, value: function () { return 2 } }
+  })
+  TestConstructor = function () {
+    this.field3 = function () { return 3 }
+  }
+  TestConstructor.prototype = testPrototype
 })
 
 afterEach(function () {
@@ -16,23 +33,9 @@ afterEach(function () {
 })
 
 describe('getStubConstructor', function () {
-  var TestConstructor, StubConstructor
+  var StubConstructor
 
   beforeEach(function () {
-    var testPrototype2 = {
-      proto2: function () { return 'p2' }
-    }
-    var testPrototype1 = Object.create(testPrototype2, {
-      proto1: { enumerable: false, value: function () { return 'p1' } }
-    })
-    var testPrototype = Object.create(testPrototype1, {
-      field1: { enumerable: true, value: function () { return 1 } },
-      field2: { enumerable: false, value: function () { return 2 } }
-    })
-    TestConstructor = function () {
-      this.field3 = function () { return 3 }
-    }
-    TestConstructor.prototype = testPrototype
     StubConstructor = getStubConstructor(TestConstructor)
   })
 
@@ -76,115 +79,12 @@ describe('getStubConstructor', function () {
       expect(stubbedObject.m1().field1().m2).to.be.a('function')
     })
   })
-
-  describe('getInstances', function () {
-    it('should return an empty list if there are no instances', function () {
-      expect(StubConstructor.getInstances()).to.deep.equal([])
-    })
-
-    it('should return a list of instances', function () {
-      var instance1 = new StubConstructor()
-      var instance2 = new StubConstructor()
-
-      expect(StubConstructor.getInstances()).to.deep.equal([ instance1, instance2 ])
-    })
-  })
-
-  describe('getInstance', function () {
-    it('should return a single instance if one has been created', function () {
-      var instance = new StubConstructor()
-
-      expect(StubConstructor.getInstance()).to.equal(instance)
-    })
-
-    it('should throw an error if no instance has been created', function () {
-      expect(StubConstructor.getInstance).to.throw(/0 instances/)
-    })
-
-    it('should throw an error if more than one instance has been created', function () {
-      new StubConstructor()
-      new StubConstructor()
-
-      expect(StubConstructor.getInstance).to.throw(/2 instances/)
-    })
-
-    it('should return an instance with a given index', function () {
-      new StubConstructor()
-      var instance2 = new StubConstructor()
-
-      expect(StubConstructor.getInstance(1)).to.equal(instance2)
-    })
-
-    it('should throw an error if not enough instances exist', function () {
-      new StubConstructor()
-
-      expect(function () { StubConstructor.getInstance(1) }).to.throw(/1 instances/)
-    })
-  })
-
-  describe('getInstancesArgs', function () {
-    it('should return an empty list if there are no instances', function () {
-      expect(StubConstructor.getInstancesArgs()).to.deep.equal([])
-    })
-
-    it('should return a list of constructor arguments', function () {
-      new StubConstructor('foo', 'bar')
-      new StubConstructor('baz', 'bla')
-
-      expect(StubConstructor.getInstancesArgs()).to.deep.equal([ [ 'foo', 'bar' ], [ 'baz', 'bla' ] ])
-    })
-  })
-
-  describe('getInstanceArgs', function () {
-    it('should return the arguments of a single instance if one has been created', function () {
-      new StubConstructor('foo', 'bar')
-      expect(StubConstructor.getInstanceArgs()).to.deep.equal([ 'foo', 'bar' ])
-    })
-
-    it('should throw an error if no instance has been created', function () {
-      expect(StubConstructor.getInstanceArgs).to.throw(/0 instances/)
-    })
-
-    it('should throw an error if more than one instance has been created', function () {
-      new StubConstructor('foo', 'bar')
-      new StubConstructor('baz', 'bla')
-
-      expect(StubConstructor.getInstanceArgs).to.throw(/2 instances/)
-    })
-
-    it('should return the arguments of an instance with a given index', function () {
-      new StubConstructor('foo', 'bar')
-      new StubConstructor('baz', 'bla')
-
-      expect(StubConstructor.getInstanceArgs(1)).to.deep.equal([ 'baz', 'bla' ])
-    })
-
-    it('should throw an error if not enough instances exist', function () {
-      new StubConstructor('foo', 'bar')
-
-      expect(function () { StubConstructor.getInstanceArgs(1) }).to.throw(/1 instances/)
-    })
-  })
 })
 
 describe('getSpyConstructor', function () {
-  var TestConstructor, SpyConstructor
+  var SpyConstructor
 
   beforeEach(function () {
-    var testPrototype2 = {
-      proto2: function () { return 'p2' }
-    }
-    var testPrototype1 = Object.create(testPrototype2, {
-      proto1: { writable: true, enumerable: false, value: function () { return 'p1' } }
-    })
-    var testPrototype = Object.create(testPrototype1, {
-      field1: { writable: true, enumerable: true, value: function () { return 1 } },
-      field2: { writable: true, enumerable: false, value: function () { return 2 } }
-    })
-    TestConstructor = function () {
-      this.field3 = function () { return 3 }
-    }
-    TestConstructor.prototype = testPrototype
     SpyConstructor = getSpyConstructor(TestConstructor)
   })
 
@@ -237,93 +137,113 @@ describe('getSpyConstructor', function () {
       expect(spiedObject.field1().field3().proto1).to.be.a('function')
     })
   })
+})
 
-  describe('getInstances', function () {
-    it('should return an empty list if there are no instances', function () {
-      expect(SpyConstructor.getInstances()).to.deep.equal([])
-    })
+describe('getSpy- and getStubConstructor', function () {
+  var dataProvider = [ {
+    description: 'getStubConstrucor',
+    getConstructor: getStubConstructor
+  }, {
+    description: 'getSpyConstrucor',
+    getConstructor: getSpyConstructor
+  } ]
 
-    it('should return a list of instances', function () {
-      var instance1 = new SpyConstructor()
-      var instance2 = new SpyConstructor()
+  dataProvider.forEach(function (testData) {
+    describe(testData.description, function () {
+      var NewConstructor
 
-      expect(SpyConstructor.getInstances()).to.deep.equal([ instance1, instance2 ])
-    })
-  })
+      beforeEach(function () {
+        NewConstructor = testData.getConstructor(TestConstructor)
+      })
 
-  describe('getInstance', function () {
-    it('should return a single instance if one has been created', function () {
-      var instance = new SpyConstructor()
+      describe('getInstances', function () {
+        it('should return an empty list if there are no instances', function () {
+          expect(NewConstructor.getInstances()).to.deep.equal([])
+        })
 
-      expect(SpyConstructor.getInstance()).to.equal(instance)
-    })
+        it('should return a list of instances', function () {
+          var instance1 = new NewConstructor()
+          var instance2 = new NewConstructor()
 
-    it('should throw an error if no instance has been created', function () {
-      expect(SpyConstructor.getInstance).to.throw(/0 instances/)
-    })
+          expect(NewConstructor.getInstances()).to.deep.equal([ instance1, instance2 ])
+        })
+      })
 
-    it('should throw an error if more than one instance has been created', function () {
-      new SpyConstructor()
-      new SpyConstructor()
+      describe('getInstance', function () {
+        it('should return a single instance if one has been created', function () {
+          var instance = new NewConstructor()
 
-      expect(SpyConstructor.getInstance).to.throw(/2 instances/)
-    })
+          expect(NewConstructor.getInstance()).to.equal(instance)
+        })
 
-    it('should return an instance with a given index', function () {
-      new SpyConstructor()
-      var instance2 = new SpyConstructor()
+        it('should throw an error if no instance has been created', function () {
+          expect(NewConstructor.getInstance).to.throw(/0 instances/)
+        })
 
-      expect(SpyConstructor.getInstance(1)).to.equal(instance2)
-    })
+        it('should throw an error if more than one instance has been created', function () {
+          new NewConstructor()
+          new NewConstructor()
 
-    it('should throw an error if not enough instances exist', function () {
-      new SpyConstructor()
+          expect(NewConstructor.getInstance).to.throw(/2 instances/)
+        })
 
-      expect(function () { SpyConstructor.getInstance(1) }).to.throw(/1 instances/)
-    })
-  })
+        it('should return an instance with a given index', function () {
+          new NewConstructor()
+          var instance2 = new NewConstructor()
 
-  describe('getInstancesArgs', function () {
-    it('should return an empty list if there are no instances', function () {
-      expect(SpyConstructor.getInstancesArgs()).to.deep.equal([])
-    })
+          expect(NewConstructor.getInstance(1)).to.equal(instance2)
+        })
 
-    it('should return a list of constructor arguments', function () {
-      new SpyConstructor('foo', 'bar')
-      new SpyConstructor('baz', 'bla')
+        it('should throw an error if not enough instances exist', function () {
+          new NewConstructor()
 
-      expect(SpyConstructor.getInstancesArgs()).to.deep.equal([ [ 'foo', 'bar' ], [ 'baz', 'bla' ] ])
-    })
-  })
+          expect(function () { NewConstructor.getInstance(1) }).to.throw(/1 instances/)
+        })
+      })
 
-  describe('getInstanceArgs', function () {
-    it('should return the arguments of a single instance if one has been created', function () {
-      new SpyConstructor('foo', 'bar')
-      expect(SpyConstructor.getInstanceArgs()).to.deep.equal([ 'foo', 'bar' ])
-    })
+      describe('getInstancesArgs', function () {
+        it('should return an empty list if there are no instances', function () {
+          expect(NewConstructor.getInstancesArgs()).to.deep.equal([])
+        })
 
-    it('should throw an error if no instance has been created', function () {
-      expect(SpyConstructor.getInstanceArgs).to.throw(/0 instances/)
-    })
+        it('should return a list of constructor arguments', function () {
+          new NewConstructor('foo', 'bar')
+          new NewConstructor('baz', 'bla')
 
-    it('should throw an error if more than one instance has been created', function () {
-      new SpyConstructor('foo', 'bar')
-      new SpyConstructor('baz', 'bla')
+          expect(NewConstructor.getInstancesArgs()).to.deep.equal([ [ 'foo', 'bar' ], [ 'baz', 'bla' ] ])
+        })
+      })
 
-      expect(SpyConstructor.getInstanceArgs).to.throw(/2 instances/)
-    })
+      describe('getInstanceArgs', function () {
+        it('should return the arguments of a single instance if one has been created', function () {
+          new NewConstructor('foo', 'bar')
+          expect(NewConstructor.getInstanceArgs()).to.deep.equal([ 'foo', 'bar' ])
+        })
 
-    it('should return the arguments of an instance with a given index', function () {
-      new SpyConstructor('foo', 'bar')
-      new SpyConstructor('baz', 'bla')
+        it('should throw an error if no instance has been created', function () {
+          expect(NewConstructor.getInstanceArgs).to.throw(/0 instances/)
+        })
 
-      expect(SpyConstructor.getInstanceArgs(1)).to.deep.equal([ 'baz', 'bla' ])
-    })
+        it('should throw an error if more than one instance has been created', function () {
+          new NewConstructor('foo', 'bar')
+          new NewConstructor('baz', 'bla')
 
-    it('should throw an error if not enough instances exist', function () {
-      new SpyConstructor('foo', 'bar')
+          expect(NewConstructor.getInstanceArgs).to.throw(/2 instances/)
+        })
 
-      expect(function () { SpyConstructor.getInstanceArgs(1) }).to.throw(/1 instances/)
+        it('should return the arguments of an instance with a given index', function () {
+          new NewConstructor('foo', 'bar')
+          new NewConstructor('baz', 'bla')
+
+          expect(NewConstructor.getInstanceArgs(1)).to.deep.equal([ 'baz', 'bla' ])
+        })
+
+        it('should throw an error if not enough instances exist', function () {
+          new NewConstructor('foo', 'bar')
+
+          expect(function () { NewConstructor.getInstanceArgs(1) }).to.throw(/1 instances/)
+        })
+      })
     })
   })
 })

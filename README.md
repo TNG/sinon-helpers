@@ -49,7 +49,7 @@ A `StubConstructor` has the following methods:
 
 ### `getSpyConstructor(OriginalConstructor)`
 Returns a [`SpyConstructor`](#spyconstructor-api) of the given constructor `OriginalConstructor`. A `SpyConstructor` is
-similar to a stub constructor except for the following differences:
+similar to a `StubConstructor` except for the following differences:
 * The `OriginalConstructor` is called when creating a new instance.
 * Methods are not stubbed but spied on (but you may manually stub some methods).
 * Which methods are spied on is not determined by looking at the prototype but by looking at what methods are actually
