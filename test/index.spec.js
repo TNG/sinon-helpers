@@ -18,12 +18,17 @@ beforeEach(function () {
   var testPrototype1 = Object.create(testPrototype2, {
     proto1: { writable: true, enumerable: false, value: function () { return 'p1' } }
   })
+
+  // if this is defined in the object literal, it will be evaluated by Object.create
+  Object.defineProperty(testPrototype1, 'protoGetter',
+    { get: function () { throw new Error('inherited getter was evaluated') } })
   var testPrototype = Object.create(testPrototype1, {
     field1: { writable: true, enumerable: true, value: function () { return 1 } },
     field2: { writable: true, enumerable: false, value: function () { return 2 } }
   })
   TestConstructor = function () {
     this.field3 = function () { return 3 }
+    Object.defineProperty(this, 'getter', { get: function () { throw new Error('getter was evaluated') } })
   }
   TestConstructor.prototype = testPrototype
 })

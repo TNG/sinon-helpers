@@ -30,10 +30,14 @@ var spyOnMethod = R.curry(function (object, methodName) {
   sinon.spy(object, methodName)
 })
 
+var isPropFunction = R.curry(function (object, prop) {
+  return !Object.getOwnPropertyDescriptor(object, prop).get && typeof object[ prop ] === 'function'
+})
+
 var applyToEachFunctionKeyInObject = function (appliedFunction, object) {
   R.compose(
     R.forEach(appliedFunction),
-    R.filter(R.propIs(Function, R.__, object))
+    R.filter(isPropFunction(object))
   )(Object.getOwnPropertyNames(object))
 }
 
