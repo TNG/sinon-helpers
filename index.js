@@ -27,7 +27,9 @@ var stubMethodWithParams = R.curry(function (object, params) {
 })
 
 var spyOnMethod = R.curry(function (object, methodName) {
-  sinon.spy(object, methodName)
+  if (!(object[ methodName ] && object[ methodName ].isSinonProxy)) {
+    sinon.spy(object, methodName)
+  }
 })
 
 var isPropFunction = R.curry(function (object, prop) {

@@ -28,6 +28,7 @@ beforeEach(function () {
   })
   TestConstructor = function () {
     this.field3 = function () { return 3 }
+    this.field4 = sinon.stub()
     Object.defineProperty(this, 'getter', { get: function () { throw new Error('getter was evaluated') } })
   }
   TestConstructor.prototype = testPrototype
@@ -109,6 +110,7 @@ describe('getSpyConstructor', function () {
     expect(spiedObject.field1).to.have.property('isSinonProxy', true)
     expect(spiedObject.field2).to.have.property('isSinonProxy', true)
     expect(spiedObject.field3).to.have.property('isSinonProxy', true)
+    expect(spiedObject.field4).to.have.property('isSinonProxy', true)
     expect(spiedObject.proto1).to.have.property('isSinonProxy', true)
     expect(spiedObject.proto2).to.have.property('isSinonProxy', true)
   })
