@@ -27,12 +27,15 @@ beforeEach(function () {
     field1: { writable: true, enumerable: true, value: function () { return 1 } },
     field2: { writable: true, enumerable: false, value: function () { return 2 } }
   })
+
   TestConstructor = function () {
     this.field3 = function () { return 3 }
     this.field4 = sinon.stub()
     Object.defineProperty(this, 'getter', { get: function () { throw new Error('getter was evaluated') } })
   }
   TestConstructor.prototype = testPrototype
+  TestConstructor.instanceMethod1 = function () { return 'i1' }
+  TestConstructor.instanceMethod2 = sinon.stub()
 })
 
 afterEach(function () {
@@ -59,6 +62,12 @@ describe('getStubConstructor', function () {
     var stubbedObject = new StubConstructor()
 
     expect(stubbedObject.field3).to.be.undefined
+  })
+
+  it('should create stubs for all instance methods', function () {
+    expect(StubConstructor.instanceMethod1).to.have.property('isSinonProxy', true)
+    expect(StubConstructor.instanceMethod1()).to.be.undefined
+    expect(StubConstructor.instanceMethod2).to.have.property('isSinonProxy', true)
   })
 
   describe('withMethods', function () {
@@ -114,6 +123,12 @@ describe('getSpyConstructor', function () {
     expect(spiedObject.field4).to.have.property('isSinonProxy', true)
     expect(spiedObject.proto1).to.have.property('isSinonProxy', true)
     expect(spiedObject.proto2).to.have.property('isSinonProxy', true)
+  })
+
+  it('should spy on all instance methods', function () {
+    expect(SpyConstructor.instanceMethod1).to.have.property('isSinonProxy', true)
+    expect(SpyConstructor.instanceMethod1()).to.equal('i1')
+    expect(SpyConstructor.instanceMethod2).to.have.property('isSinonProxy', true)
   })
 
   describe('withStubs', function () {

@@ -32,6 +32,14 @@ var spyOnMethod = R.curry(function (object, methodName) {
   }
 })
 
+var copyAndSpyOnMethod = R.curry(function (object, source, methodName) {
+  if (source[ methodName ].isSinonProxy) {
+    object[ methodName ] = source[ methodName ]
+  } else {
+    object[ methodName ] = sinon.spy(source[ methodName ])
+  }
+})
+
 var isPropFunction = R.curry(function (object, prop) {
   return !Object.getOwnPropertyDescriptor(object, prop).get && typeof object[ prop ] === 'function'
 })
@@ -106,6 +114,7 @@ function getStubConstructor (Target) {
     return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
   }
 
+  applyToEachFunctionKeyInObject(setMethodToStub(StubConstructor), Target)
   return StubConstructor
 }
 
@@ -156,6 +165,7 @@ function getSpyConstructor (Target) {
     return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
   }
 
+  applyToEachFunctionKeyInObject(copyAndSpyOnMethod(SpyConstructor, Target), Target)
   return SpyConstructor
 }
 
