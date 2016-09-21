@@ -159,9 +159,17 @@ function getSpyConstructor (Target) {
   return SpyConstructor
 }
 
+function getMethodStubs (methodParams) {
+  var result = {}
+
+  methodParams.forEach(setMethodToStubWithParams(result))
+  return result
+}
+
 module.exports = {
   getStubConstructor: getStubConstructor,
   getSpyConstructor: getSpyConstructor,
+  getMethodStubs: fa.createFunc(getMethodStubs),
   returning: fa.createArg({ args: [ ARG_RETURN_VAL ], extendsPrevious: true }),
   returningThis: fa.createArg({ extra: { returnThis: true }, extendsPrevious: true })
 }

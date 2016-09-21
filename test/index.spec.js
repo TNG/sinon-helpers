@@ -1,6 +1,7 @@
 var sinonHelpers = require('../index')
 var getStubConstructor = sinonHelpers.getStubConstructor
 var getSpyConstructor = sinonHelpers.getSpyConstructor
+var getMethodStubs = sinonHelpers.getMethodStubs
 var returning = sinonHelpers.returning
 var returningThis = sinonHelpers.returningThis
 
@@ -252,5 +253,28 @@ describe('getSpy- and getStubConstructor', function () {
         })
       })
     })
+  })
+})
+
+describe('getMethodStubs', function () {
+  it('should create an object with stubs', function () {
+    var methodStubs = getMethodStubs('method1', 'method2')
+
+    expect(methodStubs.method1.isSinonProxy).to.be.true
+    expect(methodStubs.method2.isSinonProxy).to.be.true
+  })
+
+  it('should allow specifying stub return values', function () {
+    var methodStubs = getMethodStubs('method1', returning(10), 'method2', returning(20), 'method3')
+
+    expect(methodStubs.method1()).to.equal(10, 'method1')
+    expect(methodStubs.method2()).to.equal(20, 'method2')
+    expect(methodStubs.method3()).to.be.undefined
+  })
+
+  it('should allow for methods to return their this value', function () {
+    var methodStubs = getMethodStubs('method1', returningThis, 'method2', returningThis, 'method3')
+
+    expect(methodStubs.method1().method2().method3).to.be.a('function')
   })
 })
