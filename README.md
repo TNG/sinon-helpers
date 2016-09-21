@@ -12,8 +12,20 @@ Create [`sinon`](https://github.com/sinonjs/sinon) stubs that mimic your constru
 
 ## Usage
 ```javascript
-var getStubConstructor = require('sinon-helpers').getStubConstructor
-var getSpyConstructor = require('sinon-helpers').getSpyConstructor
+var sh = require('sinon-helpers')
+
+// Create a constructor mimicking a given constructor
+var MyStubConstructor = sh.getStubConstructor(MyConstructor)
+
+// You may also add new methods and provide return values to existing methods
+MyStubConstructor = MyStubConstructor.withMethods('method1', sh.returning(1), 'method2', sh.returningThis)
+
+// Create a constructor that calls through to the original constructor
+// with spies on all methods and having a few methods stubbed
+var MySpyConstructor = sh.getSpyConstructor(MyConstructor).withStubs('method1', 'method2', sh.returning(true))
+
+// Create an object with the given methods as stubs
+var myMethods = sh.getMethodStubs('method1', 'method2', sh.returning('Hello'))
 ```
 
 ## API
@@ -82,6 +94,10 @@ A `SpyConstructor` has the following methods:
 * `.getInstanceArgs(index)`  
     Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
     instance `index` has been created.
+
+### `getMethodStubs(methodName1 <, methodName2 ...>)`
+Returns an object containing the given methods as stubs. Again, `getMethodStubs`
+[allows you to specify stub behavior](#specifying-stub-behavior).
 
 ### Specifying stub behavior
 With the additional imports
