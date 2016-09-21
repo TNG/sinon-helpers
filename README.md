@@ -100,16 +100,11 @@ Returns an object containing the given methods as stubs. Again, `getMethodStubs`
 [allows you to specify stub behavior](#specifying-stub-behavior).
 
 ### Specifying stub behavior
-With the additional imports
+`sinon-helpers` allows you to specify return values for any created stub methods:
 ```javascript
-var returning = require('sinon-helpers').returning
-var returningThis = require('sinon-helpers').returningThis
-```
-you can specify return values for any created stub methods:
-```javascript
-var Stub = getStubConstructor(MyConstructor).withMethods(
-             'method1', returning(3),
-             'method2', returningThis,
+var Stub = sh.getStubConstructor(MyConstructor).withMethods(
+             'method1', sh.returning(3),
+             'method2', sh.returningThis,
              'method3'
            )
 ```
@@ -117,11 +112,20 @@ This creates a `StubConstructor` where any instance has the three methods `.meth
 `.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`. This
 can also be used to add return values to prototype methods. This also works with `SpyConstrucor`s:
 ```javascript
-var Spy = getSpyConstructor(MyConstructor).withStubs(
-             'method1', returning(3),
-             'method2', returningThis,
+var Spy = sh.getSpyConstructor(MyConstructor).withStubs(
+             'method1', sh.returning(3),
+             'method2', sh.returningThis,
              'method3'
            )
 ```
 This creates a `SpyConstructor` where for any instance, `.method1()`, `.method2()` and `.method3()` are stubbed, and
-`.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`.
+`.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`.  
+With `getMethodStubs()`, you can do the same:
+```javascript
+var methodStubs = sh.getMethodStubs(
+                     'method1', sh.returning(3),
+                     'method2', sh.returningThis,
+                     'method3'
+                  )
+```
+
