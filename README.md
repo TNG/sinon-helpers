@@ -111,6 +111,7 @@ Returns an object containing the given methods as stubs. Again, `getMethodStubs`
 
 ### Specifying stub return values
 `sinon-helpers` allows you to specify return values for any created stub methods:
+
 ```javascript
 var Stub = sh.getStubConstructor(MyConstructor).withMethods(
              'method1', sh.returning(3),
@@ -118,9 +119,11 @@ var Stub = sh.getStubConstructor(MyConstructor).withMethods(
              'method3'
            )
 ```
+
 This creates a `StubConstructor` where any instance has the three methods `.method1()`, `.method2()` and `.method3()`.
 `.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`. This
 can also be used to add return values to prototype methods. This also works with `SpyConstrucor`s:
+
 ```javascript
 var Spy = sh.getSpyConstructor(MyConstructor).withStubs(
              'method1', sh.returning(3),
@@ -128,9 +131,11 @@ var Spy = sh.getSpyConstructor(MyConstructor).withStubs(
              'method3'
            )
 ```
+
 This creates a `SpyConstructor` where for any instance, `.method1()`, `.method2()` and `.method3()` are stubbed, and
 `.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`.  
 With `getMethodStubs()`, you can do the same:
+
 ```javascript
 var methodStubs = sh.getMethodStubs(
                      'method1', sh.returning(3),
