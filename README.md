@@ -126,7 +126,6 @@ var Spy = sh.getSpyConstructor(MyConstructor).withStubs(
 ```
 This creates a `SpyConstructor` where for any instance, `.method1()`, `.method2()` and `.method3()` are stubbed, and
 `.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`.  
-
 With `getMethodStubs()`, you can do the same:
 ```javascript
 var methodStubs = sh.getMethodStubs(
