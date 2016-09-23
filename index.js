@@ -82,6 +82,7 @@ function getStubConstructor (Target) {
   var instances = []
   var instanceArgs = []
   var stubParams = []
+  var afterCreation
 
   function StubConstructor () {
     instanceArgs.push(getArrayFromArrayLikeObject(arguments))
@@ -89,6 +90,7 @@ function getStubConstructor (Target) {
 
     applyToEachFunctionKeyInPrototypeChain(setMethodToStub(this), Target.prototype)
     stubParams.forEach(setMethodToStubWithParams(this))
+    afterCreation && afterCreation(this)
   }
 
   function withMethods (methods) {
@@ -97,6 +99,10 @@ function getStubConstructor (Target) {
   }
 
   StubConstructor.withMethods = fa.createFunc(withMethods)
+
+  StubConstructor.afterCreation = function (onAfterCreation) {
+    afterCreation = onAfterCreation
+  }
 
   StubConstructor.getInstances = function () {
     return instances
@@ -131,6 +137,7 @@ function getSpyConstructor (Target) {
   var instances = []
   var instanceArgs = []
   var stubParams = []
+  var afterCreation
 
   function SpyConstructor () {
     var instance = getConstructorInstanceWithArgsArray(Target, arguments)
@@ -139,6 +146,7 @@ function getSpyConstructor (Target) {
 
     applyToEachFunctionKeyInPrototypeChain(spyOnMethod(instance), instance)
     stubParams.forEach(stubMethodWithParams(instance))
+    afterCreation && afterCreation(instance)
     return instance
   }
 
@@ -148,6 +156,10 @@ function getSpyConstructor (Target) {
   }
 
   SpyConstructor.withStubs = fa.createFunc(withStubs)
+
+  SpyConstructor.afterCreation = function (onAfterCreation) {
+    afterCreation = onAfterCreation
+  }
 
   SpyConstructor.getInstances = function () {
     return instances
