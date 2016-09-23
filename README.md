@@ -39,28 +39,30 @@ The `StubConstructor` features several methods to add methods and query created 
 ### `StubConstructor` API
 A `StubConstructor` has the following methods:
 * `.withMethods('method1' <,'method2' <...>>)`  
-    Instances should have the listed additional methods as stubs. Returns the `StubConstructor` so you can assign
-    ```javascript
-    var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
-    ```
-    `.withMethods` also [allows you to specify method return values](#specifying-stub-return-values), see below.
+  Instances should have the listed additional methods as stubs. Returns the `StubConstructor` so you can assign
+    
+  ````javascript
+var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
+  ````
+    
+  `.withMethods` also [allows you to specify method return values](#specifying-stub-return-values), see below.
 * `.afterCreation(onAfterCreation)`  
-    When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
-    enables you to perform manual post-processing like adding additional fields before the instance is returned.
+  When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
+  enables you to perform manual post-processing like adding additional fields before the instance is returned.
 * `.getInstances()`   
-    Returns an array of instances created with the stub constructor.
+  Returns an array of instances created with the stub constructor.
 * `.getInstance()`  
-    Throws an error if no or more than one instance has been created. Otherwise, returns the instance created.
+  Throws an error if no or more than one instance has been created. Otherwise, returns the instance created.
 * `.getInstance(index)`  
-    Throws an error if not at least `index` instances have been created. Otherwise, returns the instance `index`.
+  Throws an error if not at least `index` instances have been created. Otherwise, returns the instance `index`.
 * `.getInstancesArgs()`  
-    Returns an array of arrays containing the arguments of each instance creation.
+  Returns an array of arrays containing the arguments of each instance creation.
 * `.getInstanceArgs()`  
-    Throws an error if no or more than one instance has been created. Otherwise, returns the arguments with which the
-    instance has been created.
+  Throws an error if no or more than one instance has been created. Otherwise, returns the arguments with which the
+  instance has been created.
 * `.getInstanceArgs(index)`  
-    Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
-    instance `index` has been created.
+  Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
+  instance `index` has been created.
 
 ### `getSpyConstructor(OriginalConstructor)`
 Returns a [`SpyConstructor`](#spyconstructor-api) of the given constructor `OriginalConstructor`. A `SpyConstructor` is
@@ -77,29 +79,31 @@ in you software that are generally a sign that your architecture could be improv
 ### `SpyConstructor` API
 A `SpyConstructor` has the following methods:
 * `.withStubs('method1' <,'method2' <...>>)`  
-    Instead of spied on, instances should have the listed methods as stubs. If these methods do not exist, an error will
-    be thrown. Returns the `SpyConstructor` so you can assign
-    ```javascript
-    var Spy = getSpyConstructor(MyConstructor).withStubs('myMethod')
-    ```
-    `.withStubs` also [allows you to specify stub return values](#specifying-stub-return-values), see below.
+  Instead of spied on, instances should have the listed methods as stubs. If these methods do not exist, an error will
+  be thrown. Returns the `SpyConstructor` so you can assign
+  
+  ````javascript
+var Spy = getSpyConstructor(MyConstructor).withStubs('myMethod')
+  ````
+  
+  `.withStubs` also [allows you to specify stub return values](#specifying-stub-return-values), see below.
 * `.afterCreation(onAfterCreation)`  
-    When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
-    enables you to perform manual post-processing like adding additional fields before the instance is returned.
+  When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
+  enables you to perform manual post-processing like adding additional fields before the instance is returned.
 * `.getInstances()`   
-    Returns an array of instances created with the spy constructor.
+  Returns an array of instances created with the spy constructor.
 * `.getInstance()`  
-    Throws an error if no or more than one instance has been created. Otherwise, returns the instance created.
+  Throws an error if no or more than one instance has been created. Otherwise, returns the instance created.
 * `.getInstance(index)`  
-    Throws an error if not at least `index` instances have been created. Otherwise, returns the instance `index`.
+  Throws an error if not at least `index` instances have been created. Otherwise, returns the instance `index`.
 * `.getInstancesArgs()`  
-    Returns an array of arrays containing the arguments of each instance creation.
+  Returns an array of arrays containing the arguments of each instance creation.
 * `.getInstanceArgs()`  
-    Throws an error if no or more than one instance has been created. Otherwise, returns the arguments with which the
-    instance has been created.
+  Throws an error if no or more than one instance has been created. Otherwise, returns the arguments with which the
+  instance has been created.
 * `.getInstanceArgs(index)`  
-    Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
-    instance `index` has been created.
+  Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
+  instance `index` has been created.
 
 ### `getMethodStubs(methodName1 <, methodName2 ...>)`
 Returns an object containing the given methods as stubs. Again, `getMethodStubs`
