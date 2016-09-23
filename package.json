@@ -34,7 +34,11 @@
     "url": "https://github.com/lukastaegert/sinon-helpers.git"
   },
   "keywords": [
-    "sinon"
+    "sinon",
+    "constructor",
+    "stub",
+    "mock",
+    "spy"
   ],
   "bugs": {
     "url": "https://github.com/lukastaegert/sinon-helpers/issues"
