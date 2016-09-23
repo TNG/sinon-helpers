@@ -14,15 +14,18 @@ beforeEach(function () {
   global.sinon = sinon
 
   var testPrototype2 = {
-    proto2: function () { return 'p2' }
+    proto2: function () { return 'p2' },
+    field1: function () { return 'pf1' }
   }
+
   var testPrototype1 = Object.create(testPrototype2, {
     proto1: { writable: true, enumerable: false, value: function () { return 'p1' } }
   })
 
-  // if this is defined in the object literal, it will be evaluated by Object.create
+  // if this were defined in the object literal, it would be evaluated by Object.create
   Object.defineProperty(testPrototype1, 'protoGetter',
     { get: function () { throw new Error('inherited getter was evaluated') } })
+
   var testPrototype = Object.create(testPrototype1, {
     field1: { writable: true, enumerable: true, value: function () { return 1 } },
     field2: { writable: true, enumerable: false, value: function () { return 2 } }
@@ -33,6 +36,7 @@ beforeEach(function () {
     this.field4 = sinon.stub()
     Object.defineProperty(this, 'getter', { get: function () { throw new Error('getter was evaluated') } })
   }
+
   TestConstructor.prototype = testPrototype
   TestConstructor.instanceMethod1 = function () { return 'i1' }
   TestConstructor.instanceMethod2 = sinon.stub()
