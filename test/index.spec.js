@@ -183,6 +183,16 @@ describe('getSpy- and getStubConstructor', function () {
         NewConstructor = testData.getConstructor(TestConstructor)
       })
 
+      describe('afterCreation', function () {
+        it('should allow for manual post-processing before an instance is created', function () {
+          NewConstructor.afterCreation(function (instance) {
+            instance.extraField = 7
+          })
+          var instance = new NewConstructor()
+          expect(instance.extraField).to.equal(7)
+        })
+      })
+
       describe('getInstances', function () {
         it('should return an empty list if there are no instances', function () {
           expect(NewConstructor.getInstances()).to.deep.equal([])

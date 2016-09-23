@@ -1,6 +1,6 @@
 {
   "name": "sinon-helpers",
-  "description": "Create stubs that mimic your constructors and keep track of their instances",
+  "description": "Create easily configurable sinon stubs that mimic constructors and keep track of their instances",
   "author": "Lukas Taegert <lukas.taegert@tngtech.com>",
   "license": "MIT",
   "main": "index.js",

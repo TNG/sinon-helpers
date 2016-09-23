@@ -1,5 +1,5 @@
 # sinon-helpers
-Create [`sinon`](https://github.com/sinonjs/sinon) stubs that mimic your constructors and keep track of their instances.
+Create easily configurable [`sinon`](https://github.com/sinonjs/sinon) stubs that mimic constructors and keep track of their instances.
 
 [![npm](https://img.shields.io/npm/v/sinon-helpers.svg?maxAge=3600)](https://www.npmjs.com/package/sinon-helpers)
 [![Travis branch](https://img.shields.io/travis/lukastaegert/sinon-helpers/master.svg?maxAge=3600)](https://travis-ci.org/lukastaegert/sinon-helpers)
@@ -43,7 +43,10 @@ A `StubConstructor` has the following methods:
     ```javascript
     var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
     ```
-    `.withMethods` also [allows you to specify method behavior](#specifying-stub-behavior), see below.
+    `.withMethods` also [allows you to specify method return values](#specifying-stub-return-values), see below.
+* `.afterCreation(onAfterCreation)`  
+    When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
+    enables you to perform manual post-processing like adding additional fields before the instance is returned.
 * `.getInstances()`   
     Returns an array of instances created with the stub constructor.
 * `.getInstance()`  
@@ -79,7 +82,10 @@ A `SpyConstructor` has the following methods:
     ```javascript
     var Spy = getSpyConstructor(MyConstructor).withStubs('myMethod')
     ```
-    `.withStubs` also [allows you to specify stub behavior](#specifying-stub-behavior), see below.
+    `.withStubs` also [allows you to specify stub return values](#specifying-stub-return-values), see below.
+* `.afterCreation(onAfterCreation)`  
+    When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
+    enables you to perform manual post-processing like adding additional fields before the instance is returned.
 * `.getInstances()`   
     Returns an array of instances created with the spy constructor.
 * `.getInstance()`  
@@ -97,9 +103,9 @@ A `SpyConstructor` has the following methods:
 
 ### `getMethodStubs(methodName1 <, methodName2 ...>)`
 Returns an object containing the given methods as stubs. Again, `getMethodStubs`
-[allows you to specify stub behavior](#specifying-stub-behavior).
+[allows you to specify stub return values](#specifying-stub-return-values).
 
-### Specifying stub behavior
+### Specifying stub return values
 `sinon-helpers` allows you to specify return values for any created stub methods:
 ```javascript
 var Stub = sh.getStubConstructor(MyConstructor).withMethods(
