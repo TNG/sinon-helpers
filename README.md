@@ -41,9 +41,9 @@ A `StubConstructor` has the following methods:
 * `.withMethods('method1' <,'method2' <...>>)`  
   Instances should have the listed additional methods as stubs. Returns the `StubConstructor` so you can assign
     
-  ````javascript
+  ```javascript
 var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
-  ````
+  ```
     
   `.withMethods` also [allows you to specify method return values](#specifying-stub-return-values), see below.
 * `.afterCreation(onAfterCreation)`  
@@ -82,9 +82,9 @@ A `SpyConstructor` has the following methods:
   Instead of spied on, instances should have the listed methods as stubs. If these methods do not exist, an error will
   be thrown. Returns the `SpyConstructor` so you can assign
   
-  ````javascript
+  ```javascript
 var Spy = getSpyConstructor(MyConstructor).withStubs('myMethod')
-  ````
+  ```
   
   `.withStubs` also [allows you to specify stub return values](#specifying-stub-return-values), see below.
 * `.afterCreation(onAfterCreation)`  
