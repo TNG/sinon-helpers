@@ -41,9 +41,9 @@
     "spy"
   ],
   "bugs": {
-    "url": "https://github.com/lukastaegert/sinon-helpers/issues"
+    "url": "https://github.com/TNG/sinon-helpers/issues"
   },
-  "homepage": "https://github.com/lukastaegert/sinon-helpers#readme",
+  "homepage": "https://github.com/TNG/sinon-helpers#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
