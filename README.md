@@ -43,7 +43,7 @@ A `StubConstructor` has the following methods:
   Instances should have the listed additional methods as stubs. Returns the `StubConstructor` so you can assign
     
   ```javascript
-var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
+  var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
   ```
     
   `.withMethods` also [allows you to specify method return values](#specifying-stub-return-values), see below.
@@ -84,7 +84,7 @@ A `SpyConstructor` has the following methods:
   be thrown. Returns the `SpyConstructor` so you can assign
   
   ```javascript
-var Spy = getSpyConstructor(MyConstructor).withStubs('myMethod')
+  var Spy = getSpyConstructor(MyConstructor).withStubs('myMethod')
   ```
   
   `.withStubs` also [allows you to specify stub return values](#specifying-stub-return-values), see below.
