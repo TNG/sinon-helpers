@@ -1,6 +1,5 @@
 # sinon-helpers
 Create easily configurable [`sinon`](https://github.com/sinonjs/sinon) stubs that mimic constructors and keep track of their instances.
-
 [![npm](https://img.shields.io/npm/v/sinon-helpers.svg?maxAge=3600)](https://www.npmjs.com/package/sinon-helpers)
 [![Travis branch](https://img.shields.io/travis/TNG/sinon-helpers/master.svg?maxAge=3600)](https://travis-ci.org/TNG/sinon-helpers)
 [![codecov.io](https://img.shields.io/codecov/c/github/TNG/sinon-helpers.svg?maxAge=3600)](http://codecov.io/github/TNG/sinon-helpers)
