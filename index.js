@@ -102,6 +102,7 @@ function getStubConstructor (Target) {
 
   StubConstructor.afterCreation = function (onAfterCreation) {
     afterCreation = onAfterCreation
+    return this
   }
 
   StubConstructor.getInstances = function () {
@@ -159,6 +160,7 @@ function getSpyConstructor (Target) {
 
   SpyConstructor.afterCreation = function (onAfterCreation) {
     afterCreation = onAfterCreation
+    return this
   }
 
   SpyConstructor.getInstances = function () {

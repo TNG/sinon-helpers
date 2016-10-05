@@ -191,6 +191,12 @@ describe('getSpy- and getStubConstructor', function () {
           var instance = new NewConstructor()
           expect(instance.extraField).to.equal(7)
         })
+
+        it('should return the constructor', function () {
+          expect(NewConstructor.afterCreation(function (instance) {
+            instance.extraField = 7
+          })).to.equal(NewConstructor)
+        })
       })
 
       describe('getInstances', function () {
