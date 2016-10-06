@@ -88,7 +88,7 @@ function getStubConstructor (Target) {
     instanceArgs.push(getArrayFromArrayLikeObject(arguments))
     instances.push(this)
 
-    applyToEachFunctionKeyInPrototypeChain(setMethodToStub(this), Target.prototype)
+    Target && applyToEachFunctionKeyInPrototypeChain(setMethodToStub(this), Target.prototype)
     stubParams.forEach(setMethodToStubWithParams(this))
     afterCreation && afterCreation(this)
   }
@@ -121,7 +121,7 @@ function getStubConstructor (Target) {
     return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
   }
 
-  applyToEachFunctionKeyInObject(setMethodToStub(StubConstructor), Target)
+  Target && applyToEachFunctionKeyInObject(setMethodToStub(StubConstructor), Target)
   return StubConstructor
 }
 

@@ -74,6 +74,13 @@ describe('getStubConstructor', function () {
     expect(StubConstructor.instanceMethod2).to.have.property('isSinonProxy', true)
   })
 
+  it('should create an empty constructor if no arguments are supplied', function () {
+    StubConstructor = getStubConstructor()
+    var stubbedObject = new StubConstructor()
+
+    expect(stubbedObject).to.be.an('object')
+  })
+
   describe('withMethods', function () {
     it('should allow specifying additional methods', function () {
       StubConstructor = StubConstructor.withMethods('m1', 'm2')
