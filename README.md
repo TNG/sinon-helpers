@@ -20,8 +20,8 @@ original class code is executed.
 
 New test dependencies can be easily injected with [rewire](https://github.com/jhnns/rewire) or
 [proxyquire](https://github.com/thlorenz/proxyquire) for [node](https://nodejs.org) testing and
-[*inject-loader*](https://github.com/plasticine/inject-loader) or
-[*babel-plugin-rewire*](https://github.com/speedskater/babel-plugin-rewire) for [webpack](https://webpack.github.io/)
+[inject-loader](https://github.com/plasticine/inject-loader) or
+[babel-plugin-rewire](https://github.com/speedskater/babel-plugin-rewire) for [webpack](https://webpack.github.io/)
 testing. The question remains how the stated goal can be achieved using a mocking library such as
 [sinon](https://github.com/sinonjs/sinon).
 
