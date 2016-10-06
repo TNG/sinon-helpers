@@ -1,5 +1,5 @@
 # sinon-helpers
-Create easily configurable [*sinon*](https://github.com/sinonjs/sinon) stubs that mimic constructors and keep track of their instances.
+Create easily configurable [sinon](https://github.com/sinonjs/sinon) stubs that mimic constructors and keep track of their instances.
 
 [![npm](https://img.shields.io/npm/v/sinon-helpers.svg?maxAge=3600)](https://www.npmjs.com/package/sinon-helpers)
 [![Travis branch](https://img.shields.io/travis/TNG/sinon-helpers/master.svg?maxAge=3600)](https://travis-ci.org/TNG/sinon-helpers)
@@ -18,12 +18,12 @@ instances of a class using the right constructor arguments and which methods are
 it would be nice to be able to control that these classes are properly stubbed i.e. that in our tests, none of the
 original class code is executed.
 
-New test dependencies can be easily injected with [*rewire*](https://github.com/jhnns/rewire) or
-[*proxyquire*](https://github.com/thlorenz/proxyquire) for [*node*](https://nodejs.org) testing and
+New test dependencies can be easily injected with [rewire](https://github.com/jhnns/rewire) or
+[proxyquire](https://github.com/thlorenz/proxyquire) for [node](https://nodejs.org) testing and
 [*inject-loader*](https://github.com/plasticine/inject-loader) or
-[*babel-plugin-rewire*](https://github.com/speedskater/babel-plugin-rewire) for [*webpack*](https://webpack.github.io/)
+[*babel-plugin-rewire*](https://github.com/speedskater/babel-plugin-rewire) for [webpack](https://webpack.github.io/)
 testing. The question remains how the stated goal can be achieved using a mocking library such as
-[*sinon*](https://github.com/sinonjs/sinon).
+[sinon](https://github.com/sinonjs/sinon).
 
 In the examples, we want to mock a constructor `MyConstructor`.
 
