@@ -76,12 +76,11 @@ var myMethods = sh.getMethodStubs('method1', 'method2', sh.returning('Hello'))
 ```
 
 ## API
-### `getStubConstructor(OriginalConstructor)`
-Returns a [`StubConstructor`](#stubconstructor-api) mimicking the given constructor `OriginalConstructor`. This can be
-especially handy if you use something like [`rewire`](https://github.com/jhnns/rewire) or
-[`babel-plugin-rewire`](https://github.com/speedskater/babel-plugin-rewire) for dependency injection. When called
+### `getStubConstructor(<OriginalConstructor>)`
+Returns a [`StubConstructor`](#stubconstructor-api) mimicking the given constructor `OriginalConstructor`. When called
 with `new`, this constructor creates an object with stubs for any methods of the prototype object of `ConstructorName`.
-The `StubConstructor` features several methods to add methods and query created instances.
+If you call `getStubConstructor` without any arguments, you receive a StubConstructor without any pre-defined methods.
+Any `StubConstructor` features several methods to add methods and query created instances.
 
 ### `StubConstructor` API
 A `StubConstructor` has the following methods:
