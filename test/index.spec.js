@@ -1,3 +1,5 @@
+/* global it, describe, beforeEach, afterEach */
+
 var sinonHelpers = require('../index')
 var getStubConstructor = sinonHelpers.getStubConstructor
 var getSpyConstructor = sinonHelpers.getSpyConstructor
