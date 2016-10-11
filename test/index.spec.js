@@ -1,4 +1,5 @@
-/* global it, describe, beforeEach, afterEach */
+/* eslint-env mocha */
+/* eslint-disable no-new */
 
 var sinonHelpers = require('../index')
 var getStubConstructor = sinonHelpers.getStubConstructor
