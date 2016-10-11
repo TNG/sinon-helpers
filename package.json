@@ -44,6 +44,13 @@
     "url": "https://github.com/TNG/sinon-helpers/issues"
   },
   "homepage": "https://github.com/TNG/sinon-helpers#readme",
+  "peerDependencies": {
+    "sinon": ">=1.15.0, >=2.0.0-pre"
+  },
+  "dependencies": {
+    "fluent-arguments": "^1.0.5",
+    "ramda": "^0.22.1"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
@@ -53,13 +60,9 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.1.1",
     "semantic-release": "^4.3.5",
-    "sinon": "^1.17.6",
+    "sinon": ">=1.15.0",
     "standard": "^8.4.0",
     "testdouble": "^1.7.0",
     "validate-commit-msg": "^2.8.2"
-  },
-  "dependencies": {
-    "fluent-arguments": "^1.0.5",
-    "ramda": "^0.22.1"
   }
 }
