@@ -1,6 +1,6 @@
-/* global sinon */
 var R = require('ramda')
 var fa = require('fluent-arguments')
+var sinon = require('sinon')
 var ARG_RETURN_VAL = 'returnVal'
 var ARG_RETURN_THIS = 'returnThis'
 
