@@ -15,6 +15,7 @@ before_script:
 script:
   - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
   - codecov
+  - bithound check git@github.com:TNG/sinon-helpers.git
 after_success:
   - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'
   - python travis_after_all.py

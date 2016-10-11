@@ -52,6 +52,7 @@
     "ramda": "^0.22.1"
   },
   "devDependencies": {
+    "bithound": "^1.7.0",
     "chai": "^3.5.0",
     "codecov": "^1.0.1",
     "eslint-config-standard": "^6.2.0",
