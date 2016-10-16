@@ -87,102 +87,79 @@ function getConstructorInstanceWithArgs (Constructor, constructorArgs) {
   return new HelpConstructor(constructorArgs)
 }
 
-function getStubConstructor (Target) {
-  var instances = []
-  var instanceArgs = []
-  var methodParams = []
-  var afterCreation
-
-  function StubConstructor () {
-    var instance = getConstructorInstanceWithArgs(function () {}, [])
-    instanceArgs.push(getArrayFromArrayLikeObject(arguments))
-    instances.push(instance)
-
-    Target && applyToEachFunctionKeyInPrototypeChain(setMethodToStub(instance), Target.prototype)
-    methodParams.forEach(setMethodToStubWithParams(instance))
-    afterCreation && afterCreation(instance)
-    return instance
+function getStubConstructorProperties (Target) {
+  return {
+    SourceConstructor: function () {},
+    processInstanceMethod: setMethodToStub,
+    getInstanceMethodNameSource: function () { return Target.prototype },
+    processClassMethod: function (StubOrSpyConstructor) { return setMethodToStub(StubOrSpyConstructor) },
+    configureMethodsKey: 'withMethods',
+    configureMethod: setMethodToStubWithParams
   }
-
-  function withMethods (methods) {
-    methodParams = methods
-    return this
-  }
-
-  StubConstructor.withMethods = fa.createFunc(withMethods)
-
-  StubConstructor.afterCreation = function (onAfterCreation) {
-    afterCreation = onAfterCreation
-    return this
-  }
-
-  StubConstructor.getInstances = function () {
-    return instances
-  }
-
-  StubConstructor.getInstance = function (index) {
-    return instances[ getInstanceIndexWithValidation(index, instances.length) ]
-  }
-
-  StubConstructor.getInstancesArgs = function () {
-    return instanceArgs
-  }
-
-  StubConstructor.getInstanceArgs = function (index) {
-    return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
-  }
-
-  Target && applyToEachFunctionKeyInObject(setMethodToStub(StubConstructor), Target)
-  return StubConstructor
 }
 
-function getSpyConstructor (Target) {
-  var instances = []
-  var instanceArgs = []
-  var methodParams = []
-  var afterCreation
-
-  function SpyConstructor () {
-    var instance = getConstructorInstanceWithArgs(Target, arguments)
-    instanceArgs.push(getArrayFromArrayLikeObject(arguments))
-    instances.push(instance)
-
-    Target && applyToEachFunctionKeyInPrototypeChain(spyOnMethod(instance), instance)
-    methodParams.forEach(stubMethodWithParams(instance))
-    afterCreation && afterCreation(instance)
-    return instance
+function getSpyConstructorProperties (Target) {
+  return {
+    SourceConstructor: Target,
+    processInstanceMethod: spyOnMethod,
+    getInstanceMethodNameSource: function (instance) { return instance },
+    processClassMethod: function (StubOrSpyConstructor) { return copyAndSpyOnMethod(StubOrSpyConstructor, Target) },
+    configureMethodsKey: 'withStubs',
+    configureMethod: stubMethodWithParams
   }
+}
 
-  function withStubs (methods) {
-    methodParams = methods
-    return this
+function getStubOrSpyConstructor (getConstructorProperties) {
+  return function (Target) {
+    var constructorProps = getConstructorProperties(Target)
+    var instances = []
+    var instanceArgs = []
+    var methodParams = []
+    var afterCreation
+
+    function StubOrSpyConstructor () {
+      var instance = getConstructorInstanceWithArgs(constructorProps.SourceConstructor, arguments)
+      instanceArgs.push(getArrayFromArrayLikeObject(arguments))
+      instances.push(instance)
+
+      Target && applyToEachFunctionKeyInPrototypeChain(
+        constructorProps.processInstanceMethod(instance), constructorProps.getInstanceMethodNameSource(instance))
+      methodParams.forEach(constructorProps.configureMethod(instance))
+      afterCreation && afterCreation(instance)
+      return instance
+    }
+
+    function configureMethods (methods) {
+      methodParams = methods
+      return this
+    }
+
+    StubOrSpyConstructor[ constructorProps.configureMethodsKey ] = fa.createFunc(configureMethods)
+
+    StubOrSpyConstructor.afterCreation = function (onAfterCreation) {
+      afterCreation = onAfterCreation
+      return this
+    }
+
+    StubOrSpyConstructor.getInstances = function () {
+      return instances
+    }
+
+    StubOrSpyConstructor.getInstance = function (index) {
+      return instances[ getInstanceIndexWithValidation(index, instances.length) ]
+    }
+
+    StubOrSpyConstructor.getInstancesArgs = function () {
+      return instanceArgs
+    }
+
+    StubOrSpyConstructor.getInstanceArgs = function (index) {
+      return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
+    }
+
+    Target && applyToEachFunctionKeyInObject(constructorProps.processClassMethod(StubOrSpyConstructor), Target)
+    return StubOrSpyConstructor
   }
-
-  SpyConstructor.withStubs = fa.createFunc(withStubs)
-
-  SpyConstructor.afterCreation = function (onAfterCreation) {
-    afterCreation = onAfterCreation
-    return this
-  }
-
-  SpyConstructor.getInstances = function () {
-    return instances
-  }
-
-  SpyConstructor.getInstance = function (index) {
-    return instances[ getInstanceIndexWithValidation(index, instances.length) ]
-  }
-
-  SpyConstructor.getInstancesArgs = function () {
-    return instanceArgs
-  }
-
-  SpyConstructor.getInstanceArgs = function (index) {
-    return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
-  }
-
-  Target && applyToEachFunctionKeyInObject(copyAndSpyOnMethod(SpyConstructor, Target), Target)
-  return SpyConstructor
 }
 
 function getMethodStubs (methodParams) {
@@ -193,8 +170,8 @@ function getMethodStubs (methodParams) {
 }
 
 module.exports = {
-  getStubConstructor: getStubConstructor,
-  getSpyConstructor: getSpyConstructor,
+  getStubConstructor: getStubOrSpyConstructor(getStubConstructorProperties),
+  getSpyConstructor: getStubOrSpyConstructor(getSpyConstructorProperties),
   getMethodStubs: fa.createFunc(getMethodStubs),
   returning: fa.createArg({ args: [ ARG_RETURN_VAL ], extendsPrevious: true }),
   returningThis: fa.createArg({ extra: { returnThis: true }, extendsPrevious: true })
