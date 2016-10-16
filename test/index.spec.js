@@ -131,12 +131,12 @@ describe('getSpyConstructor', function () {
   it('should put spies on all methods', function () {
     var spiedObject = new SpyConstructor()
 
-    expect(spiedObject.field1).to.have.property('isSinonProxy', true)
-    expect(spiedObject.field2).to.have.property('isSinonProxy', true)
-    expect(spiedObject.field3).to.have.property('isSinonProxy', true)
-    expect(spiedObject.field4).to.have.property('isSinonProxy', true)
-    expect(spiedObject.proto1).to.have.property('isSinonProxy', true)
-    expect(spiedObject.proto2).to.have.property('isSinonProxy', true)
+    expect(spiedObject.field1).to.have.property('isSinonProxy', true, 'field1')
+    expect(spiedObject.field2).to.have.property('isSinonProxy', true, 'field2')
+    expect(spiedObject.field3).to.have.property('isSinonProxy', true, 'field3')
+    expect(spiedObject.field4).to.have.property('isSinonProxy', true, 'field4')
+    expect(spiedObject.proto1).to.have.property('isSinonProxy', true, 'proto1')
+    expect(spiedObject.proto2).to.have.property('isSinonProxy', true, 'proto2')
   })
 
   it('should spy on all instance methods', function () {

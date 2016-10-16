@@ -78,23 +78,34 @@ var getInstanceIndexWithValidation = function (index, numInstances) {
   return instanceIndex
 }
 
+function getConstructorInstanceWithArgs (Constructor, constructorArgs) {
+  function HelpConstructor (args) {
+    return Constructor.apply(this, args)
+  }
+
+  HelpConstructor.prototype = Constructor.prototype
+  return new HelpConstructor(constructorArgs)
+}
+
 function getStubConstructor (Target) {
   var instances = []
   var instanceArgs = []
-  var stubParams = []
+  var methodParams = []
   var afterCreation
 
   function StubConstructor () {
+    var instance = getConstructorInstanceWithArgs(function () {}, [])
     instanceArgs.push(getArrayFromArrayLikeObject(arguments))
-    instances.push(this)
+    instances.push(instance)
 
-    Target && applyToEachFunctionKeyInPrototypeChain(setMethodToStub(this), Target.prototype)
-    stubParams.forEach(setMethodToStubWithParams(this))
-    afterCreation && afterCreation(this)
+    Target && applyToEachFunctionKeyInPrototypeChain(setMethodToStub(instance), Target.prototype)
+    methodParams.forEach(setMethodToStubWithParams(instance))
+    afterCreation && afterCreation(instance)
+    return instance
   }
 
   function withMethods (methods) {
-    stubParams = methods
+    methodParams = methods
     return this
   }
 
@@ -125,34 +136,25 @@ function getStubConstructor (Target) {
   return StubConstructor
 }
 
-function getConstructorInstanceWithArgsArray (Constructor, argsArray) {
-  function HelpConstructor (args) {
-    return Constructor.apply(this, args)
-  }
-
-  HelpConstructor.prototype = Constructor.prototype
-  return new HelpConstructor(argsArray)
-}
-
 function getSpyConstructor (Target) {
   var instances = []
   var instanceArgs = []
-  var stubParams = []
+  var methodParams = []
   var afterCreation
 
   function SpyConstructor () {
-    var instance = getConstructorInstanceWithArgsArray(Target, arguments)
+    var instance = getConstructorInstanceWithArgs(Target, arguments)
     instanceArgs.push(getArrayFromArrayLikeObject(arguments))
     instances.push(instance)
 
-    applyToEachFunctionKeyInPrototypeChain(spyOnMethod(instance), instance)
-    stubParams.forEach(stubMethodWithParams(instance))
+    Target && applyToEachFunctionKeyInPrototypeChain(spyOnMethod(instance), instance)
+    methodParams.forEach(stubMethodWithParams(instance))
     afterCreation && afterCreation(instance)
     return instance
   }
 
-  function withStubs (stubs) {
-    stubParams = stubs
+  function withStubs (methods) {
+    methodParams = methods
     return this
   }
 
@@ -179,7 +181,7 @@ function getSpyConstructor (Target) {
     return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
   }
 
-  applyToEachFunctionKeyInObject(copyAndSpyOnMethod(SpyConstructor, Target), Target)
+  Target && applyToEachFunctionKeyInObject(copyAndSpyOnMethod(SpyConstructor, Target), Target)
   return SpyConstructor
 }
 
