@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-new */
 
-var sinonHelpers = require('../index')
+var sinonHelpers = require('../src/index')
 var getStubConstructor = sinonHelpers.getStubConstructor
 var getSpyConstructor = sinonHelpers.getSpyConstructor
 var getMethodStubs = sinonHelpers.getMethodStubs

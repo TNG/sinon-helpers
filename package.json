@@ -3,7 +3,7 @@
   "description": "Create easily configurable sinon stubs that mimic constructors and keep track of their instances",
   "author": "Lukas Taegert <lukas.taegert@tngtech.com>",
   "license": "MIT",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "mocha",
     "lint": "eslint .",
