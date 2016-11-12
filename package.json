@@ -63,7 +63,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.1.1",
     "semantic-release": "^4.3.5",
-    "sinon": ">=1.17.6",
+    "sinon": ">=1.15.0",
     "testdouble": "^1.7.0",
     "validate-commit-msg": "^2.8.2"
   }
