@@ -63,7 +63,6 @@
     "mocha": "^3.2.0",
     "semantic-release": "^6.3.2",
     "sinon": ">=1.15.0",
-    "testdouble": "^1.7.0",
     "validate-commit-msg": "^2.8.2"
   }
 }

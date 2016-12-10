@@ -1,5 +1,18 @@
 {
   "critics": {
     "lint": {"engine": "standard"}
+  },
+  "dependencies": {
+    "unused-ignores": [
+      "mocha",
+      "validate-commit-msg",
+      "semantic-release",
+      "istanbul",
+      "ghooks",
+      "eslint-plugin-standard",
+      "eslint-plugin-promise",
+      "eslint",
+      "codecov"
+    ]
   }
 }
