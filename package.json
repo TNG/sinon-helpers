@@ -7,16 +7,14 @@
   "scripts": {
     "test": "mocha",
     "lint": "eslint .",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "precommit": "npm run lint",
+    "commitmsg": "validate-commit-msg",
+    "prepush": "npm test",
+    "postmerge": "npm install && npm prune",
+    "postrewrite": "npm install && npm prune"
   },
   "config": {
-    "ghooks": {
-      "pre-commit": "npm run lint",
-      "commit-msg": "validate-commit-msg",
-      "pre-push": "npm test",
-      "post-merge": "npm install && npm prune",
-      "post-rewrite": "npm install && npm prune"
-    },
     "validate-commit-msg": {
       "types": [
         "feat",
@@ -49,7 +47,7 @@
   },
   "dependencies": {
     "fluent-arguments": "^1.0.5",
-    "ramda": "^0.22.1"
+    "ramda": "0.23.*"
   },
   "devDependencies": {
     "chai": "^3.5.0",
@@ -58,10 +56,10 @@
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-promise": "^3.4.0",
     "eslint-plugin-standard": "^2.0.1",
-    "ghooks": "^1.3.2",
+    "husky": "^0.12.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
-    "semantic-release": "^6.3.2",
+    "semantic-release": "6.3.*",
     "sinon": ">=1.15.0",
     "validate-commit-msg": "^2.8.2"
   }
