@@ -10,7 +10,8 @@ function getArrayFromArrayLikeObject (args) {
 }
 
 var isMethod = R.curry(function (object, propName) {
-  return !Object.getOwnPropertyDescriptor(object, propName).get && typeof object[ propName ] === 'function'
+  return !Object.getOwnPropertyDescriptor(object, propName).get &&
+    typeof object[ propName ] === 'function' && !(propName === 'constructor')
 })
 
 var applyToEachFunctionKeyInObject = function (appliedFunction, object) {
@@ -62,6 +63,8 @@ module.exports = function getStubOrSpyConstructor (getConstructorProperties) {
       afterCreation && afterCreation(instance)
       return instance
     }
+
+    StubOrSpyConstructor.prototype = constructorProps.SourceConstructor.prototype
 
     function configureMethods (methods) {
       methodParams = methods

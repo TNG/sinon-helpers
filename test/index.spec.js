@@ -128,6 +128,11 @@ describe('getSpyConstructor', function () {
     expect(spiedObject.proto2()).to.equal('p2')
   })
 
+  it('should create instances of the original constructor', function () {
+    var spiedObject = new SpyConstructor()
+    expect(spiedObject).to.be.an.instanceof(TestConstructor)
+  })
+
   it('should put spies on all methods', function () {
     var spiedObject = new SpyConstructor()
 
@@ -191,6 +196,11 @@ describe('getSpy- and getStubConstructor', function () {
 
       beforeEach(function () {
         NewConstructor = testData.getConstructor(TestConstructor)
+      })
+
+      it('should create instances of itself', function () {
+        var instance = new NewConstructor()
+        expect(instance).to.be.an.instanceof(NewConstructor)
       })
 
       describe('afterCreation', function () {
