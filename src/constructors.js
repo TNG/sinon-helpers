@@ -2,7 +2,7 @@ var R = require('ramda')
 var fa = require('fluent-arguments')
 
 function getConstructorInstanceWithArgs (Constructor, constructorArgs) {
-  return new (Function.prototype.bind.apply(Constructor, arguments))()
+  return new (Function.prototype.bind.apply(Constructor, [ null ].concat(Array.prototype.slice.call(constructorArgs))))()
 }
 
 function getArrayFromArrayLikeObject (args) {

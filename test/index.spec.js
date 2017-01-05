@@ -35,6 +35,7 @@ beforeEach(function () {
   })
 
   TestConstructor = function () {
+    this.args = Array.prototype.slice.call(arguments)
     this.field3 = function () { return 3 }
     this.field4 = sinon.stub()
     Object.defineProperty(this, 'getter', { get: function () { throw new Error('getter was evaluated') } })
@@ -131,6 +132,11 @@ describe('getSpyConstructor', function () {
   it('should create instances of the original constructor', function () {
     var spiedObject = new SpyConstructor()
     expect(spiedObject).to.be.an.instanceof(TestConstructor)
+  })
+
+  it('should create instances using the right arguments', function () {
+    var spiedObject = new SpyConstructor('Var 1', 2)
+    expect(spiedObject.args).to.deep.equal([ 'Var 1', 2 ])
   })
 
   it('should put spies on all methods', function () {
