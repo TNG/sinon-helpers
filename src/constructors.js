@@ -1,10 +1,6 @@
 var R = require('ramda')
 var fa = require('fluent-arguments')
 
-function getConstructorInstanceWithArgs (Constructor, constructorArgs) {
-  return new (Function.prototype.bind.apply(Constructor, [ null ].concat(Array.prototype.slice.call(constructorArgs))))()
-}
-
 function getArrayFromArrayLikeObject (args) {
   return Array.prototype.slice.call(args)
 }
@@ -53,15 +49,15 @@ module.exports = function getStubOrSpyConstructor (getConstructorProperties) {
     var afterCreation
 
     function StubOrSpyConstructor () {
-      var instance = getConstructorInstanceWithArgs(constructorProps.SourceConstructor, arguments)
+      constructorProps.SourceConstructor.apply(this, arguments)
       instanceArgs.push(getArrayFromArrayLikeObject(arguments))
-      instances.push(instance)
+      instances.push(this)
 
       Target && applyToEachFunctionKeyInPrototypeChain(
-        constructorProps.processMethodOfInstance(instance), constructorProps.getInstanceMethodNameSource(instance))
-      methodParams.forEach(constructorProps.configureMethodOfInstance(instance))
-      afterCreation && afterCreation(instance)
-      return instance
+        constructorProps.processMethodOfInstance(this), constructorProps.getInstanceMethodNameSource(this))
+      methodParams.forEach(constructorProps.configureMethodOfInstance(this))
+      afterCreation && afterCreation(this)
+      return this
     }
 
     StubOrSpyConstructor.prototype = constructorProps.SourceConstructor.prototype
