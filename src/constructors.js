@@ -57,7 +57,6 @@ module.exports = function getStubOrSpyConstructor (getConstructorProperties) {
         constructorProps.processMethodOfInstance(this), constructorProps.getInstanceMethodNameSource(this))
       methodParams.forEach(constructorProps.configureMethodOfInstance(this))
       afterCreation && afterCreation(this)
-      return this
     }
 
     StubOrSpyConstructor.prototype = constructorProps.SourceConstructor.prototype
