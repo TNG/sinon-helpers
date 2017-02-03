@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/TNG/sinon-helpers#readme",
   "peerDependencies": {
-    "sinon": ">=1.15.0"
+    "sinon": ">=1.15.0 || >= 2.0.0-pre.2"
   },
   "dependencies": {
     "fluent-arguments": "^1.0.5",
@@ -60,7 +60,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "semantic-release": "6.3.*",
-    "sinon": ">=1.15.0",
+    "sinon": "2.0.0-pre.5",
     "validate-commit-msg": "^2.8.2"
   }
 }
