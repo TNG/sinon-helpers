@@ -46,7 +46,7 @@
     "sinon": ">=1.15.0 || >= 2.0.0-pre.2"
   },
   "dependencies": {
-    "fluent-arguments": "^1.0.5",
+    "fluent-arguments": "^1.0.6",
     "ramda": "0.23.*"
   },
   "devDependencies": {
