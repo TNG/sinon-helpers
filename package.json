@@ -46,7 +46,7 @@
     "sinon": ">=1.15.0 || >= 2.0.0-pre.2"
   },
   "dependencies": {
-    "fluent-arguments": "^1.0.5",
+    "fluent-arguments": "^1.0.6",
     "ramda": "0.23.*"
   },
   "devDependencies": {
@@ -55,12 +55,12 @@
     "eslint": "^3.16.1",
     "eslint-config-standard": "^7.0.0",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "husky": "^0.13.0",
+    "eslint-plugin-standard": "^2.1.1",
+    "husky": "^0.13.2",
     "istanbul": "^0.4.5",
     "mocha": "^3.2.0",
     "semantic-release": "^6.3.2",
-    "sinon": "2.0.0-pre.6",
+    "sinon": "next",
     "validate-commit-msg": "^2.11.1"
   }
 }
