@@ -1,6 +1,6 @@
 {
   "critics": {
-    "lint": {"engine": "standard"}
+    "lint": {"engine": "eslint"}
   },
   "dependencies": {
     "unused-ignores": [
