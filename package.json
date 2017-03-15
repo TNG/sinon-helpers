@@ -43,7 +43,7 @@
   },
   "homepage": "https://github.com/TNG/sinon-helpers#readme",
   "peerDependencies": {
-    "sinon": ">=1.15.0 || >= 2.0.0-pre.2"
+    "sinon": ">=2.0.0"
   },
   "dependencies": {
     "fluent-arguments": "^1.0.6",
