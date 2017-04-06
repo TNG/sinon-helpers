@@ -1,3 +1,6 @@
+/* eslint-env mocha */
+/* eslint-disable no-unused-expressions,no-new */
+
 var sinonHelpers = require('../src/index')
 var getStubConstructor = sinonHelpers.getStubConstructor
 var getSpyConstructor = sinonHelpers.getSpyConstructor
@@ -19,23 +22,23 @@ beforeEach(function () {
   }
 
   var testPrototype1 = Object.create(testPrototype2, {
-    proto1: { writable: true, enumerable: false, value: function () { return 'p1' } }
+    proto1: {writable: true, enumerable: false, value: function () { return 'p1' }}
   })
 
   // if this were defined in the object literal, it would be evaluated by Object.create
   Object.defineProperty(testPrototype1, 'protoGetter',
-    { get: function () { throw new Error('inherited getter was evaluated') } })
+    {get: function () { throw new Error('inherited getter was evaluated') }})
 
   var testPrototype = Object.create(testPrototype1, {
-    field1: { writable: true, enumerable: true, value: function () { return 1 } },
-    field2: { writable: true, enumerable: false, value: function () { return 2 } }
+    field1: {writable: true, enumerable: true, value: function () { return 1 }},
+    field2: {writable: true, enumerable: false, value: function () { return 2 }}
   })
 
   TestConstructor = function () {
     this.args = Array.prototype.slice.call(arguments)
     this.field3 = function () { return 3 }
     this.field4 = sinon.stub()
-    Object.defineProperty(this, 'getter', { get: function () { throw new Error('getter was evaluated') } })
+    Object.defineProperty(this, 'getter', {get: function () { throw new Error('getter was evaluated') }})
   }
 
   TestConstructor.prototype = testPrototype
@@ -133,7 +136,7 @@ describe('getSpyConstructor', function () {
 
   it('should create instances using the right arguments', function () {
     var spiedObject = new SpyConstructor('Var 1', 2)
-    expect(spiedObject.args).to.deep.equal([ 'Var 1', 2 ])
+    expect(spiedObject.args).to.deep.equal(['Var 1', 2])
   })
 
   it('should put spies on all methods', function () {
@@ -185,13 +188,13 @@ describe('getSpyConstructor', function () {
 })
 
 describe('getSpy- and getStubConstructor', function () {
-  var dataProvider = [ {
+  var dataProvider = [{
     description: 'getStubConstrucor',
     getConstructor: getStubConstructor
   }, {
     description: 'getSpyConstrucor',
     getConstructor: getSpyConstructor
-  } ]
+  }]
 
   dataProvider.forEach(function (testData) {
     describe(testData.description, function () {
@@ -231,7 +234,7 @@ describe('getSpy- and getStubConstructor', function () {
           var instance1 = new NewConstructor()
           var instance2 = new NewConstructor()
 
-          expect(NewConstructor.getInstances()).to.deep.equal([ instance1, instance2 ])
+          expect(NewConstructor.getInstances()).to.deep.equal([instance1, instance2])
         })
       })
 
@@ -276,14 +279,14 @@ describe('getSpy- and getStubConstructor', function () {
           new NewConstructor('foo', 'bar')
           new NewConstructor('baz', 'bla')
 
-          expect(NewConstructor.getInstancesArgs()).to.deep.equal([ [ 'foo', 'bar' ], [ 'baz', 'bla' ] ])
+          expect(NewConstructor.getInstancesArgs()).to.deep.equal([['foo', 'bar'], ['baz', 'bla']])
         })
       })
 
       describe('getInstanceArgs', function () {
         it('should return the arguments of a single instance if one has been created', function () {
           new NewConstructor('foo', 'bar')
-          expect(NewConstructor.getInstanceArgs()).to.deep.equal([ 'foo', 'bar' ])
+          expect(NewConstructor.getInstanceArgs()).to.deep.equal(['foo', 'bar'])
         })
 
         it('should throw an error if no instance has been created', function () {
@@ -301,7 +304,7 @@ describe('getSpy- and getStubConstructor', function () {
           new NewConstructor('foo', 'bar')
           new NewConstructor('baz', 'bla')
 
-          expect(NewConstructor.getInstanceArgs(1)).to.deep.equal([ 'baz', 'bla' ])
+          expect(NewConstructor.getInstanceArgs(1)).to.deep.equal(['baz', 'bla'])
         })
 
         it('should throw an error if not enough instances exist', function () {

@@ -4,16 +4,6 @@
   "author": "Lukas Taegert <lukas.taegert@tngtech.com>",
   "license": "MIT",
   "main": "src/index.js",
-  "scripts": {
-    "test": "mocha",
-    "lint": "eslint .",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "precommit": "npm run lint",
-    "commitmsg": "validate-commit-msg",
-    "prepush": "npm test",
-    "postmerge": "npm install && npm prune",
-    "postrewrite": "npm install && npm prune"
-  },
   "config": {
     "validate-commit-msg": {
       "types": [
@@ -46,21 +36,35 @@
     "sinon": ">=1.15.0"
   },
   "dependencies": {
-    "fluent-arguments": "^1.0.6",
-    "ramda": "0.23.*"
+    "fluent-arguments": ">= 1.0.6",
+    "ramda": ">= 0.23.*"
   },
   "devDependencies": {
-    "chai": "^3.5.0",
-    "codecov": "^2.0.2",
-    "eslint": "^3.17.1",
-    "eslint-config-standard": "^7.0.1",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^2.1.1",
-    "husky": "^0.13.2",
-    "istanbul": "^0.4.5",
-    "mocha": "^3.2.0",
-    "semantic-release": "^6.3.2",
-    "sinon": "2.0.0",
-    "validate-commit-msg": "^2.11.2"
+    "chai": "~3.5.0",
+    "codecov": "latest",
+    "husky": "latest",
+    "istanbul": "~0.4.5",
+    "lint-staged": "latest",
+    "mocha": "3.*",
+    "semantic-release": "latest",
+    "standard": "latest",
+    "sinon": "~2.1.0",
+    "validate-commit-msg": "latest"
+  },
+  "scripts": {
+    "test": "mocha",
+    "lint": "standard",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "precommit": "lint-staged",
+    "commitmsg": "validate-commit-msg",
+    "prepush": "npm test",
+    "postmerge": "npm install && npm prune",
+    "postrewrite": "npm install && npm prune"
+  },
+  "lint-staged": {
+    "*.js": [
+      "standard --fix",
+      "git add"
+    ]
   }
 }

@@ -7,7 +7,7 @@ function getArrayFromArrayLikeObject (args) {
 
 var isMethod = R.curry(function (object, propName) {
   return !Object.getOwnPropertyDescriptor(object, propName).get &&
-    typeof object[ propName ] === 'function' && !(propName === 'constructor')
+    typeof object[propName] === 'function' && !(propName === 'constructor')
 })
 
 var applyToEachFunctionKeyInObject = function (appliedFunction, object) {
@@ -66,7 +66,7 @@ module.exports = function getStubOrSpyConstructor (getConstructorProperties) {
       return this
     }
 
-    StubOrSpyConstructor[ constructorProps.configureMethodsKey ] = fa.createFunc(configureMethods)
+    StubOrSpyConstructor[constructorProps.configureMethodsKey] = fa.createFunc(configureMethods)
 
     StubOrSpyConstructor.afterCreation = function (onAfterCreation) {
       afterCreation = onAfterCreation
@@ -78,7 +78,7 @@ module.exports = function getStubOrSpyConstructor (getConstructorProperties) {
     }
 
     StubOrSpyConstructor.getInstance = function (index) {
-      return instances[ getInstanceIndexWithValidation(index, instances.length) ]
+      return instances[getInstanceIndexWithValidation(index, instances.length)]
     }
 
     StubOrSpyConstructor.getInstancesArgs = function () {
@@ -86,7 +86,7 @@ module.exports = function getStubOrSpyConstructor (getConstructorProperties) {
     }
 
     StubOrSpyConstructor.getInstanceArgs = function (index) {
-      return instanceArgs[ getInstanceIndexWithValidation(index, instances.length) ]
+      return instanceArgs[getInstanceIndexWithValidation(index, instances.length)]
     }
 
     Target && applyToEachFunctionKeyInObject(constructorProps.processMethodOfConstructor(StubOrSpyConstructor), Target)
