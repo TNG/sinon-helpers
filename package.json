@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "fluent-arguments": ">= 1.0.6",
-    "ramda": ">= 0.23.*"
+    "ramda": ">= 0.23.0"
   },
   "devDependencies": {
     "chai": "~3.5.0",
@@ -45,7 +45,7 @@
     "husky": "latest",
     "istanbul": "~0.4.5",
     "lint-staged": "latest",
-    "mocha": "3.*",
+    "mocha": "~3.2.0",
     "semantic-release": "latest",
     "standard": "latest",
     "sinon": "~2.1.0",
