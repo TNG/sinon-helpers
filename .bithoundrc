@@ -1,6 +1,6 @@
 {
   "critics": {
-    "lint": {"engine": "eslint"}
+    "lint": {"engine": "standard"}
   },
   "dependencies": {
     "unused-ignores": [
@@ -8,9 +8,6 @@
       "validate-commit-msg",
       "semantic-release",
       "istanbul",
-      "ghooks",
-      "eslint-plugin-standard",
-      "eslint",
       "codecov"
     ]
   }
