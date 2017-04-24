@@ -45,7 +45,7 @@
     "husky": "latest",
     "istanbul": "~0.4.5",
     "lint-staged": "latest",
-    "mocha": "~3.2.0",
+    "mocha": "~3.3.0",
     "semantic-release": "latest",
     "standard": "latest",
     "sinon": "~2.1.0",
