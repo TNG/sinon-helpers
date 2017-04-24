@@ -40,16 +40,16 @@
     "ramda": ">= 0.23.0"
   },
   "devDependencies": {
-    "chai": "3",
-    "codecov": "2",
-    "husky": "0",
-    "istanbul": "0",
-    "lint-staged": "3",
-    "mocha": "3",
-    "semantic-release": "6",
-    "standard": "10",
-    "sinon": "2",
-    "validate-commit-msg": "2"
+    "chai": "^3.5.0",
+    "codecov": "^2.1.0",
+    "husky": "^0.13.3",
+    "istanbul": "^0.4.5",
+    "lint-staged": "^3.4.0",
+    "mocha": "^3.3.0",
+    "semantic-release": "^6.3.2",
+    "standard": "^10.0.2",
+    "sinon": "^2.1.0",
+    "validate-commit-msg": "^2.12.1"
   },
   "scripts": {
     "test": "mocha",
