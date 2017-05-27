@@ -1,31 +1,27 @@
-var R = require('ramda')
-var fa = require('fluent-arguments')
+import fa from 'fluent-arguments'
+import R from 'ramda'
 
-function getArrayFromArrayLikeObject (args) {
-  return Array.prototype.slice.call(args)
-}
+const getArrayFromArrayLikeObject = args => Array.prototype.slice.call(args)
 
-var isMethod = R.curry(function (object, propName) {
-  return !Object.getOwnPropertyDescriptor(object, propName).get &&
-    typeof object[propName] === 'function' && !(propName === 'constructor')
-})
+const isMethod = R.curry((object, propName) =>
+!Object.getOwnPropertyDescriptor(object, propName).get &&
+typeof object[propName] === 'function' &&
+!(propName === 'constructor'))
 
-var applyToEachFunctionKeyInObject = function (appliedFunction, object) {
-  R.compose(
-    R.forEach(appliedFunction),
-    R.filter(isMethod(object))
-  )(Object.getOwnPropertyNames(object))
-}
+const applyToEachFunctionKeyInObject = (appliedFunction, object) => R.compose(
+  R.forEach(appliedFunction),
+  R.filter(isMethod(object))
+)(Object.getOwnPropertyNames(object))
 
-var applyToEachFunctionKeyInPrototypeChain = function (appliedFunction, object) {
+const applyToEachFunctionKeyInPrototypeChain = (appliedFunction, object) => {
   if (object) {
     applyToEachFunctionKeyInObject(appliedFunction, object)
     applyToEachFunctionKeyInPrototypeChain(appliedFunction, Object.getPrototypeOf(object))
   }
 }
 
-var getInstanceIndexWithValidation = function (index, numInstances) {
-  var instanceIndex = index || 0
+const getInstanceIndexWithValidation = (index, numInstances) => {
+  const instanceIndex = index || 0
 
   if (typeof index === 'undefined') {
     if (numInstances > 1) {
@@ -40,56 +36,44 @@ var getInstanceIndexWithValidation = function (index, numInstances) {
   return instanceIndex
 }
 
-module.exports = function getStubOrSpyConstructor (getConstructorProperties) {
-  return function (Target) {
-    var constructorProps = getConstructorProperties(Target)
-    var instances = []
-    var instanceArgs = []
-    var methodParams = []
-    var afterCreation
+export default getConstructorProperties => Target => {
+  const constructorProps = getConstructorProperties(Target)
+  const instances = []
+  const instanceArgs = []
+  let methodParams = []
+  let afterCreation
 
-    function StubOrSpyConstructor () {
-      constructorProps.SourceConstructor.apply(this, arguments)
-      instanceArgs.push(getArrayFromArrayLikeObject(arguments))
-      instances.push(this)
+  function StubOrSpyConstructor () {
+    constructorProps.SourceConstructor.apply(this, arguments)
+    instanceArgs.push(getArrayFromArrayLikeObject(arguments))
+    instances.push(this)
 
-      Target && applyToEachFunctionKeyInPrototypeChain(
-        constructorProps.processMethodOfInstance(this), constructorProps.getInstanceMethodNameSource(this))
-      methodParams.forEach(constructorProps.configureMethodOfInstance(this))
-      afterCreation && afterCreation(this)
-    }
-
-    StubOrSpyConstructor.prototype = constructorProps.SourceConstructor.prototype
-
-    function configureMethods (methods) {
-      methodParams = methods
-      return this
-    }
-
-    StubOrSpyConstructor[constructorProps.configureMethodsKey] = fa.createFunc(configureMethods)
-
-    StubOrSpyConstructor.afterCreation = function (onAfterCreation) {
-      afterCreation = onAfterCreation
-      return this
-    }
-
-    StubOrSpyConstructor.getInstances = function () {
-      return instances
-    }
-
-    StubOrSpyConstructor.getInstance = function (index) {
-      return instances[getInstanceIndexWithValidation(index, instances.length)]
-    }
-
-    StubOrSpyConstructor.getInstancesArgs = function () {
-      return instanceArgs
-    }
-
-    StubOrSpyConstructor.getInstanceArgs = function (index) {
-      return instanceArgs[getInstanceIndexWithValidation(index, instances.length)]
-    }
-
-    Target && applyToEachFunctionKeyInObject(constructorProps.processMethodOfConstructor(StubOrSpyConstructor), Target)
-    return StubOrSpyConstructor
+    Target && applyToEachFunctionKeyInPrototypeChain(
+      constructorProps.processMethodOfInstance(this), constructorProps.getInstanceMethodNameSource(this))
+    methodParams.forEach(constructorProps.configureMethodOfInstance(this))
+    afterCreation && afterCreation(this)
   }
+
+  StubOrSpyConstructor.prototype = constructorProps.SourceConstructor.prototype
+
+  StubOrSpyConstructor[constructorProps.configureMethodsKey] = fa.createFunc(function (methods) {
+    methodParams = methods
+    return this
+  })
+
+  StubOrSpyConstructor.afterCreation = function (onAfterCreation) {
+    afterCreation = onAfterCreation
+    return this
+  }
+
+  StubOrSpyConstructor.getInstances = () => instances
+
+  StubOrSpyConstructor.getInstance = index => instances[getInstanceIndexWithValidation(index, instances.length)]
+
+  StubOrSpyConstructor.getInstancesArgs = () => instanceArgs
+
+  StubOrSpyConstructor.getInstanceArgs = index => instanceArgs[getInstanceIndexWithValidation(index, instances.length)]
+
+  Target && applyToEachFunctionKeyInObject(constructorProps.processMethodOfConstructor(StubOrSpyConstructor), Target)
+  return StubOrSpyConstructor
 }
