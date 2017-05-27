@@ -18,6 +18,7 @@ rollup.rollup({
       presets: [
         ['env', {
           modules: false,
+          loose: true,
           targets: {node: 4}
         }]
       ],
