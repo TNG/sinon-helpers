@@ -3,7 +3,12 @@
   "description": "Create easily configurable sinon stubs that mimic constructors and keep track of their instances",
   "author": "Lukas Taegert <lukas.taegert@tngtech.com>",
   "license": "MIT",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "jsnext:main": "dist/index.mjs",
+  "files": [
+    "dist"
+  ],
   "config": {
     "validate-commit-msg": {
       "types": [
@@ -36,25 +41,32 @@
     "sinon": ">=1.15.0"
   },
   "dependencies": {
-    "fluent-arguments": ">= 1.0.6",
-    "ramda": ">= 0.23.0"
+    "fluent-arguments": "^1.0.7",
+    "ramda": "^0.23.0"
   },
   "devDependencies": {
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-ramda": "^1.2.0",
+    "babel-preset-env": "^1.5.1",
     "chai": "^4.0.0",
     "codecov": "^2.2.0",
     "husky": "^0.13.3",
     "istanbul": "^0.4.5",
     "lint-staged": "^3.5.0",
     "mocha": "^3.4.2",
+    "rollup": "^0.41.6",
+    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-commonjs": "^8.0.2",
+    "rollup-plugin-node-resolve": "^3.0.0",
     "semantic-release": "^6.3.6",
-    "standard": "^10.0.2",
     "sinon": "^2.3.2",
+    "standard": "^10.0.2",
     "validate-commit-msg": "^2.12.1"
   },
   "scripts": {
-    "test": "mocha",
+    "test": "node build && mocha",
     "lint": "standard",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "npm install && node build && semantic-release pre && npm publish && semantic-release post",
     "precommit": "lint-staged",
     "commitmsg": "validate-commit-msg",
     "prepush": "npm test",
