@@ -13,7 +13,8 @@ before_install:
 before_script:
   - npm prune
 script:
-  - node build && istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
+  - node build
+  - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
   - codecov
 after_success:
   - 'curl -Lo travis_after_all.py https://git.io/travis_after_all'
