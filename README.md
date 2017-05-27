@@ -1,4 +1,6 @@
 # sinon-helpers
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/TNG/sinon-helpers.svg)](https://greenkeeper.io/)
 Create easily configurable [sinon](https://github.com/sinonjs/sinon) stubs that mimic constructors and keep track of their instances.
 
 [![npm](https://img.shields.io/npm/v/sinon-helpers.svg?maxAge=3600)](https://www.npmjs.com/package/sinon-helpers)
