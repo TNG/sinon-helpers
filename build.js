@@ -1,13 +1,18 @@
 const rollup = require('rollup')
-const resolve = require('rollup-plugin-node-resolve')
 const commonjs = require('rollup-plugin-commonjs')
 const babel = require('rollup-plugin-babel')
 
 rollup.rollup({
   entry: 'src/index.js',
-  external: ['sinon'],
+  external: [
+    'sinon',
+    'fluent-arguments',
+    'ramda/src/compose',
+    'ramda/src/curry',
+    'ramda/src/filter',
+    'ramda/src/forEach'
+  ],
   plugins: [
-    resolve({jsnext: true, module: true}),
     commonjs(),
     babel({
       presets: [
