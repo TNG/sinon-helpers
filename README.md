@@ -1,6 +1,5 @@
 # sinon-helpers
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/TNG/sinon-helpers.svg)](https://greenkeeper.io/)
 Create easily configurable [sinon](https://github.com/sinonjs/sinon) stubs that mimic constructors and keep track of their instances.
 
 [![npm](https://img.shields.io/npm/v/sinon-helpers.svg?maxAge=3600)](https://www.npmjs.com/package/sinon-helpers)
@@ -8,6 +7,7 @@ Create easily configurable [sinon](https://github.com/sinonjs/sinon) stubs that 
 [![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?maxAge=3600)](http://standardjs.com/)
 [![npm](https://img.shields.io/npm/dm/sinon-helpers.svg?maxAge=3600)](https://www.npmjs.com/package/sinon-helpers)
 [![David](https://img.shields.io/david/TNG/sinon-helpers.svg?maxAge=3600)](https://david-dm.org/TNG/sinon-helpers)
+[![Greenkeeper badge](https://badges.greenkeeper.io/TNG/sinon-helpers.svg)](https://greenkeeper.io/)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?maxAge=3600)](https://github.com/semantic-release/semantic-release)
 
 ## Motivation
