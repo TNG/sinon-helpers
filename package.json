@@ -41,8 +41,8 @@
     "sinon": ">=1.15.0"
   },
   "dependencies": {
-    "fluent-arguments": "^1.0.7",
-    "ramda": "^0.23.0"
+    "fluent-arguments": "^1.1.0",
+    "ramda": "^0.24.0"
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.22.0",
@@ -50,7 +50,7 @@
     "babel-preset-env": "^1.5.1",
     "chai": "^4.0.0",
     "codecov": "^2.2.0",
-    "husky": "^0.13.3",
+    "husky": "^0.13.4",
     "istanbul": "^0.4.5",
     "lint-staged": "^3.5.0",
     "mocha": "^3.4.2",
