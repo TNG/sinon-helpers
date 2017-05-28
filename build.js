@@ -1,5 +1,4 @@
 const rollup = require('rollup')
-const commonjs = require('rollup-plugin-commonjs')
 const babel = require('rollup-plugin-babel')
 
 rollup
@@ -14,7 +13,6 @@ rollup
       'ramda/src/forEach'
     ],
     plugins: [
-      commonjs(),
       babel({
         presets: [
           [
