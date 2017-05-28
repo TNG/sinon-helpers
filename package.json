@@ -54,6 +54,8 @@
     "istanbul": "^0.4.5",
     "lint-staged": "^3.5.0",
     "mocha": "^3.4.2",
+    "prettier-eslint-cli": "^3.6.1",
+    "prettier-standard": "^5.0.0",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^8.0.2",
@@ -75,6 +77,7 @@
   },
   "lint-staged": {
     "*.js": [
+      "prettier-standard",
       "standard --fix",
       "git add"
     ]

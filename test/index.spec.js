@@ -17,32 +17,65 @@ beforeEach(function () {
   global.sinon = sinon
 
   var testPrototype2 = {
-    proto2: function () { return 'p2' },
-    field1: function () { return 'pf1' }
+    proto2: function () {
+      return 'p2'
+    },
+    field1: function () {
+      return 'pf1'
+    }
   }
 
   var testPrototype1 = Object.create(testPrototype2, {
-    proto1: {writable: true, enumerable: false, value: function () { return 'p1' }}
+    proto1: {
+      writable: true,
+      enumerable: false,
+      value: function () {
+        return 'p1'
+      }
+    }
   })
 
   // if this were defined in the object literal, it would be evaluated by Object.create
-  Object.defineProperty(testPrototype1, 'protoGetter',
-    {get: function () { throw new Error('inherited getter was evaluated') }})
+  Object.defineProperty(testPrototype1, 'protoGetter', {
+    get: function () {
+      throw new Error('inherited getter was evaluated')
+    }
+  })
 
   var testPrototype = Object.create(testPrototype1, {
-    field1: {writable: true, enumerable: true, value: function () { return 1 }},
-    field2: {writable: true, enumerable: false, value: function () { return 2 }}
+    field1: {
+      writable: true,
+      enumerable: true,
+      value: function () {
+        return 1
+      }
+    },
+    field2: {
+      writable: true,
+      enumerable: false,
+      value: function () {
+        return 2
+      }
+    }
   })
 
   TestConstructor = function () {
     this.args = Array.prototype.slice.call(arguments)
-    this.field3 = function () { return 3 }
+    this.field3 = function () {
+      return 3
+    }
     this.field4 = sinon.stub()
-    Object.defineProperty(this, 'getter', {get: function () { throw new Error('getter was evaluated') }})
+    Object.defineProperty(this, 'getter', {
+      get: function () {
+        throw new Error('getter was evaluated')
+      }
+    })
   }
 
   TestConstructor.prototype = testPrototype
-  TestConstructor.instanceMethod1 = function () { return 'i1' }
+  TestConstructor.instanceMethod1 = function () {
+    return 'i1'
+  }
   TestConstructor.instanceMethod2 = sinon.stub()
 })
 
@@ -73,9 +106,15 @@ describe('getStubConstructor', function () {
   })
 
   it('should create stubs for all instance methods', function () {
-    expect(StubConstructor.instanceMethod1).to.have.property('isSinonProxy', true)
+    expect(StubConstructor.instanceMethod1).to.have.property(
+      'isSinonProxy',
+      true
+    )
     expect(StubConstructor.instanceMethod1()).to.be.undefined
-    expect(StubConstructor.instanceMethod2).to.have.property('isSinonProxy', true)
+    expect(StubConstructor.instanceMethod2).to.have.property(
+      'isSinonProxy',
+      true
+    )
   })
 
   it('should create an empty constructor if no arguments are supplied', function () {
@@ -95,7 +134,13 @@ describe('getStubConstructor', function () {
     })
 
     it('should allow specifying method return values', function () {
-      StubConstructor = StubConstructor.withMethods('m1', returning(1), 'field1', returning(2), 'm2')
+      StubConstructor = StubConstructor.withMethods(
+        'm1',
+        returning(1),
+        'field1',
+        returning(2),
+        'm2'
+      )
       var stubbedObject = new StubConstructor()
 
       expect(stubbedObject.m1()).to.equal(1, 'm1')
@@ -104,7 +149,13 @@ describe('getStubConstructor', function () {
     })
 
     it('should allow for methods to return their this value', function () {
-      StubConstructor = StubConstructor.withMethods('m1', returningThis, 'field1', returningThis, 'm2')
+      StubConstructor = StubConstructor.withMethods(
+        'm1',
+        returningThis,
+        'field1',
+        returningThis,
+        'm2'
+      )
       var stubbedObject = new StubConstructor()
 
       expect(stubbedObject.m1().field1().m2).to.be.a('function')
@@ -151,9 +202,15 @@ describe('getSpyConstructor', function () {
   })
 
   it('should spy on all instance methods', function () {
-    expect(SpyConstructor.instanceMethod1).to.have.property('isSinonProxy', true)
+    expect(SpyConstructor.instanceMethod1).to.have.property(
+      'isSinonProxy',
+      true
+    )
     expect(SpyConstructor.instanceMethod1()).to.equal('i1')
-    expect(SpyConstructor.instanceMethod2).to.have.property('isSinonProxy', true)
+    expect(SpyConstructor.instanceMethod2).to.have.property(
+      'isSinonProxy',
+      true
+    )
   })
 
   describe('withStubs', function () {
@@ -170,7 +227,13 @@ describe('getSpyConstructor', function () {
     })
 
     it('should allow specifying stub return values', function () {
-      SpyConstructor = SpyConstructor.withStubs('field1', returning(10), 'field3', returning(20), 'proto1')
+      SpyConstructor = SpyConstructor.withStubs(
+        'field1',
+        returning(10),
+        'field3',
+        returning(20),
+        'proto1'
+      )
       var spiedObject = new SpyConstructor()
 
       expect(spiedObject.field1()).to.equal(10, 'field1')
@@ -179,7 +242,13 @@ describe('getSpyConstructor', function () {
     })
 
     it('should allow for methods to return their this value', function () {
-      SpyConstructor = SpyConstructor.withStubs('field1', returningThis, 'field3', returningThis, 'proto1')
+      SpyConstructor = SpyConstructor.withStubs(
+        'field1',
+        returningThis,
+        'field3',
+        returningThis,
+        'proto1'
+      )
       var spiedObject = new SpyConstructor()
 
       expect(spiedObject.field1().field3().proto1).to.be.a('function')
@@ -188,13 +257,16 @@ describe('getSpyConstructor', function () {
 })
 
 describe('getSpy- and getStubConstructor', function () {
-  var dataProvider = [{
-    description: 'getStubConstrucor',
-    getConstructor: getStubConstructor
-  }, {
-    description: 'getSpyConstrucor',
-    getConstructor: getSpyConstructor
-  }]
+  var dataProvider = [
+    {
+      description: 'getStubConstrucor',
+      getConstructor: getStubConstructor
+    },
+    {
+      description: 'getSpyConstrucor',
+      getConstructor: getSpyConstructor
+    }
+  ]
 
   dataProvider.forEach(function (testData) {
     describe(testData.description, function () {
@@ -219,9 +291,11 @@ describe('getSpy- and getStubConstructor', function () {
         })
 
         it('should return the constructor', function () {
-          expect(NewConstructor.afterCreation(function (instance) {
-            instance.extraField = 7
-          })).to.equal(NewConstructor)
+          expect(
+            NewConstructor.afterCreation(function (instance) {
+              instance.extraField = 7
+            })
+          ).to.equal(NewConstructor)
         })
       })
 
@@ -234,7 +308,10 @@ describe('getSpy- and getStubConstructor', function () {
           var instance1 = new NewConstructor()
           var instance2 = new NewConstructor()
 
-          expect(NewConstructor.getInstances()).to.deep.equal([instance1, instance2])
+          expect(NewConstructor.getInstances()).to.deep.equal([
+            instance1,
+            instance2
+          ])
         })
       })
 
@@ -266,7 +343,9 @@ describe('getSpy- and getStubConstructor', function () {
         it('should throw an error if not enough instances exist', function () {
           new NewConstructor()
 
-          expect(function () { NewConstructor.getInstance(1) }).to.throw(/1 instances/)
+          expect(function () {
+            NewConstructor.getInstance(1)
+          }).to.throw(/1 instances/)
         })
       })
 
@@ -279,7 +358,10 @@ describe('getSpy- and getStubConstructor', function () {
           new NewConstructor('foo', 'bar')
           new NewConstructor('baz', 'bla')
 
-          expect(NewConstructor.getInstancesArgs()).to.deep.equal([['foo', 'bar'], ['baz', 'bla']])
+          expect(NewConstructor.getInstancesArgs()).to.deep.equal([
+            ['foo', 'bar'],
+            ['baz', 'bla']
+          ])
         })
       })
 
@@ -304,13 +386,18 @@ describe('getSpy- and getStubConstructor', function () {
           new NewConstructor('foo', 'bar')
           new NewConstructor('baz', 'bla')
 
-          expect(NewConstructor.getInstanceArgs(1)).to.deep.equal(['baz', 'bla'])
+          expect(NewConstructor.getInstanceArgs(1)).to.deep.equal([
+            'baz',
+            'bla'
+          ])
         })
 
         it('should throw an error if not enough instances exist', function () {
           new NewConstructor('foo', 'bar')
 
-          expect(function () { NewConstructor.getInstanceArgs(1) }).to.throw(/1 instances/)
+          expect(function () {
+            NewConstructor.getInstanceArgs(1)
+          }).to.throw(/1 instances/)
         })
       })
     })
@@ -326,7 +413,13 @@ describe('getMethodStubs', function () {
   })
 
   it('should allow specifying stub return values', function () {
-    var methodStubs = getMethodStubs('method1', returning(10), 'method2', returning(20), 'method3')
+    var methodStubs = getMethodStubs(
+      'method1',
+      returning(10),
+      'method2',
+      returning(20),
+      'method3'
+    )
 
     expect(methodStubs.method1()).to.equal(10, 'method1')
     expect(methodStubs.method2()).to.equal(20, 'method2')
@@ -334,7 +427,13 @@ describe('getMethodStubs', function () {
   })
 
   it('should allow for methods to return their this value', function () {
-    var methodStubs = getMethodStubs('method1', returningThis, 'method2', returningThis, 'method3')
+    var methodStubs = getMethodStubs(
+      'method1',
+      returningThis,
+      'method2',
+      returningThis,
+      'method3'
+    )
 
     expect(methodStubs.method1().method2().method3).to.be.a('function')
   })
