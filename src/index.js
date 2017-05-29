@@ -1,4 +1,4 @@
-import fa from 'fluent-arguments'
+import { createArg, createFunc } from 'fluent-arguments'
 import { curry } from 'ramda'
 import sinon from 'sinon'
 import getStubOrSpyConstructor from './constructors'
@@ -78,14 +78,14 @@ export const getSpyConstructor = getStubOrSpyConstructor(
   getSpyConstructorProperties
 )
 
-export const getMethodStubs = fa.createFunc(getMethodStubsHandler)
+export const getMethodStubs = createFunc(getMethodStubsHandler)
 
-export const returning = fa.createArg({
+export const returning = createArg({
   args: [ARG_RETURN_VAL],
   extendsPrevious: true
 })
 
-export const returningThis = fa.createArg({
+export const returningThis = createArg({
   extra: { returnThis: true },
   extendsPrevious: true
 })

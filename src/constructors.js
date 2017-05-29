@@ -1,4 +1,4 @@
-import fa from 'fluent-arguments'
+import { createFunc } from 'fluent-arguments'
 import { compose, curry, filter, forEach } from 'ramda'
 
 const getArrayFromArrayLikeObject = args => Array.prototype.slice.call(args)
@@ -68,7 +68,7 @@ export default getConstructorProperties => Target => {
 
   StubOrSpyConstructor.prototype = constructorProps.SourceConstructor.prototype
 
-  StubOrSpyConstructor[constructorProps.addMethodsKey] = fa.createFunc(function (
+  StubOrSpyConstructor[constructorProps.addMethodsKey] = createFunc(function (
     methods
   ) {
     methodParams = methods
