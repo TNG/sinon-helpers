@@ -14,16 +14,7 @@ rollup
     ],
     plugins: [
       babel({
-        presets: [
-          [
-            'env',
-            {
-              modules: false,
-              loose: true,
-              targets: { node: 4 }
-            }
-          ]
-        ],
+        presets: [['latest', { es2015: { modules: false, loose: true } }]],
         plugins: ['ramda', 'external-helpers']
       })
     ]
