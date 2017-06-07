@@ -55,10 +55,22 @@ Thus you can test for all instances separately which methods have been invoked i
 `this`-value if you need to stub a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface).
 * As the prototype is not modified, you do not have to clean up your stubs after the test!
 
+## Installation
+```bash
+npm install --save-dev sinon-helpers
+```
+
+or
+
+```bash
+yarn add --dev sinon-helpers
+```
+
 ## Usage
 ```javascript
 var sh = require('sinon-helpers') // CommonJS
-import sh from 'sinon-helpers' // ES6
+import * as sh from 'sinon-helpers' // ES6
+// alternative: import {getStubConstructor, getSpyConstructor, returning} from 'sinon-helpers'
 
 // Create a constructor mimicking a given constructor
 var MyStubConstructor = sh.getStubConstructor(MyConstructor)

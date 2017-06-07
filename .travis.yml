@@ -12,8 +12,8 @@ before_install:
   - npm i -g npm@~4.0.0
 before_script:
   - npm prune
-script:
   - node build
+script:
   - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
   - codecov
 after_success:
