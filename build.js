@@ -4,14 +4,8 @@ const babel = require('rollup-plugin-babel')
 rollup
   .rollup({
     entry: 'src/index.js',
-    external: [
-      'sinon',
-      'fluent-arguments',
-      'ramda/src/compose',
-      'ramda/src/curry',
-      'ramda/src/filter',
-      'ramda/src/forEach'
-    ],
+    external: id =>
+      /ramda/.test(id) || ['sinon', 'fluent-arguments'].includes(id),
     plugins: [
       babel({
         presets: [['latest', { es2015: { modules: false, loose: true } }]],
