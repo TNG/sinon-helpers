@@ -5,7 +5,7 @@ rollup
   .rollup({
     entry: 'src/index.js',
     external: id =>
-      /ramda/.test(id) || ['sinon', 'fluent-arguments'].includes(id),
+      /ramda/.test(id) || ['sinon', 'fluent-arguments'].indexOf(id) >= 0,
     plugins: [
       babel({
         presets: [['latest', { es2015: { modules: false, loose: true } }]],
