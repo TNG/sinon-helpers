@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-/* eslint-disable no-unused-expressions,no-new */
+/* eslint-disable no-unused-expressions,no-new,tree-shaking/no-side-effects-in-initialization */
 
 var sinonHelpers = require('../dist/index')
 var getStubConstructor = sinonHelpers.getStubConstructor

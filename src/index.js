@@ -1,14 +1,16 @@
-import { createArg, createFunc } from 'fluent-arguments'
-import { curry } from 'ramda'
+import {
+  /* tree-shaking no-side-effects-when-called */ createArg,
+  /* tree-shaking no-side-effects-when-called */ createFunc
+} from 'fluent-arguments'
 import sinon from 'sinon'
-import getStubOrSpyConstructor from './constructors'
+import /* tree-shaking no-side-effects-when-called */ getStubOrSpyConstructor from './constructors'
 
 const ARG_RETURN_VAL = 'returnVal'
 const ARG_RETURN_THIS = 'returnThis'
 
-const setMethodToStub = curry((object, methodName) => {
+const setMethodToStub = object => methodName => {
   object[methodName] = sinon.stub()
-})
+}
 
 const configureStub = (object, params) => {
   if (params.hasOwnProperty(ARG_RETURN_THIS)) {
@@ -17,32 +19,32 @@ const configureStub = (object, params) => {
     object[params.value].returns(params[ARG_RETURN_VAL])
   }
 }
-const setMethodToStubWithParams = curry((object, params) => {
-  setMethodToStub(object, params.value)
+const setMethodToStubWithParams = object => params => {
+  setMethodToStub(object)(params.value)
   configureStub(object, params)
-})
+}
 
-const stubMethodWithParams = curry((object, params) => {
+const stubMethodWithParams = object => params => {
   object[params.value] &&
     object[params.value].restore &&
     object[params.value].restore()
   sinon.stub(object, params.value)
   configureStub(object, params)
-})
+}
 
-const spyOnMethod = curry((object, methodName) => {
+const spyOnMethod = object => methodName => {
   if (!(object[methodName] && object[methodName].isSinonProxy)) {
     sinon.spy(object, methodName)
   }
-})
+}
 
-const copyAndSpyOnMethod = curry((object, source, methodName) => {
+const copyAndSpyOnMethod = (object, source) => methodName => {
   if (source[methodName].isSinonProxy) {
     object[methodName] = source[methodName]
   } else {
     object[methodName] = sinon.spy(source[methodName])
   }
-})
+}
 
 const getStubConstructorProperties = Target => ({
   SourceConstructor: function () {},

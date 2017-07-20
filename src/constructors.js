@@ -1,14 +1,12 @@
 import { createFunc } from 'fluent-arguments'
-import { compose, curry, filter, forEach } from 'ramda'
+import { compose, filter, forEach } from 'ramda'
 
 const getArrayFromArrayLikeObject = args => Array.prototype.slice.call(args)
 
-const isMethod = curry(
-  (object, propName) =>
-    !Object.getOwnPropertyDescriptor(object, propName).get &&
-    typeof object[propName] === 'function' &&
-    !(propName === 'constructor')
-)
+const isMethod = object => propName =>
+  !Object.getOwnPropertyDescriptor(object, propName).get &&
+  typeof object[propName] === 'function' &&
+  !(propName === 'constructor')
 
 const applyToEachFunctionKeyInObject = (appliedFunction, object) =>
   compose(forEach(appliedFunction), filter(isMethod(object)))(
@@ -45,7 +43,7 @@ const getInstanceIndexWithValidation = (index, numInstances) => {
   return instanceIndex
 }
 
-export default getConstructorProperties => Target => {
+export default /* tree-shaking no-side-effects-when-called */ getConstructorProperties => Target => {
   const constructorProps = getConstructorProperties(Target)
   const instances = []
   const instanceArgs = []
