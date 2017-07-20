@@ -1,3 +1,5 @@
+/* eslint-disable tree-shaking/no-side-effects-in-initialization */
+
 const rollup = require('rollup')
 const babel = require('rollup-plugin-babel')
 
