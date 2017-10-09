@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "fluent-arguments": "^1.1.0",
-    "ramda": "^0.24.0"
+    "ramda": "^0.25.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
