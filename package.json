@@ -50,7 +50,7 @@
     "babel-plugin-ramda": "^1.2.0",
     "babel-preset-latest": "^6.24.1",
     "chai": "^4.1.0",
-    "codecov": "^2.2.0",
+    "codecov": "^3.0.0",
     "eslint": "^4.2.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
