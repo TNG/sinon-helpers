@@ -69,9 +69,10 @@
     "validate-commit-msg": "^2.12.2"
   },
   "scripts": {
-    "test": "node build && mocha",
+    "build": "rollup -c",
+    "test": "npm run build && mocha",
     "lint": "prettier-standard *.js src/**/*.js test/**/*.js",
-    "semantic-release": "node build && semantic-release pre && npm publish && semantic-release post",
+    "semantic-release": "npm run build && semantic-release pre && npm publish && semantic-release post",
     "precommit": "lint-staged",
     "commitmsg": "validate-commit-msg",
     "prepush": "npm test",
