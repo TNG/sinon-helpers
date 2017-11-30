@@ -8,7 +8,14 @@ export default {
     /ramda/.test(id) || ['sinon', 'fluent-arguments'].indexOf(id) >= 0,
   plugins: [
     babel({
-      presets: [['latest', { es2015: { modules: false, loose: true } }]],
+      presets: [
+        [
+          'env',
+          {
+            modules: false
+          }
+        ]
+      ],
       plugins: ['ramda', 'external-helpers']
     })
   ],
