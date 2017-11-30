@@ -9,19 +9,6 @@
   "files": [
     "dist"
   ],
-  "config": {
-    "validate-commit-msg": {
-      "types": [
-        "feat",
-        "fix",
-        "docs",
-        "refactor",
-        "test",
-        "chore",
-        "revert"
-      ]
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/TNG/sinon-helpers.git"
@@ -41,6 +28,8 @@
     "sinon": ">=1.15.0"
   },
   "dependencies": {
+    "@commitlint/cli": "^5.2.0",
+    "@commitlint/config-angular": "^5.1.1",
     "fluent-arguments": "^1.1.0",
     "ramda": "^0.24.0"
   },
@@ -65,19 +54,19 @@
     "rollup": "^0.52.0",
     "rollup-plugin-babel": "^2.7.1",
     "semantic-release": "^6.3.6",
-    "sinon": "^2.3.8",
-    "validate-commit-msg": "^2.12.2"
+    "sinon": "^2.3.8"
   },
   "scripts": {
     "build": "rollup -c",
     "test": "npm run build && mocha",
     "lint": "prettier-standard *.js src/**/*.js test/**/*.js",
-    "semantic-release": "npm run build && semantic-release pre && npm publish && semantic-release post",
     "precommit": "lint-staged",
-    "commitmsg": "validate-commit-msg",
+    "commitmsg": "commitlint -e",
+    "postcomit": "git reset",
     "prepush": "npm test",
     "postmerge": "npm install && npm prune",
-    "postrewrite": "npm install && npm prune"
+    "postrewrite": "npm install && npm prune",
+    "semantic-release": "npm run build && semantic-release pre && npm publish && semantic-release post"
   },
   "lint-staged": {
     "*.js": [

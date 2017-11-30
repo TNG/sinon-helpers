@@ -12,7 +12,7 @@ before_install:
   - npm i -g npm@~4.0.0
 before_script:
   - npm prune
-  - node build
+  - npm run build
 script:
   - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
   - codecov
