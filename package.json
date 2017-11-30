@@ -63,7 +63,7 @@
     "lint": "prettier-standard *.js src/**/*.js test/**/*.js",
     "precommit": "lint-staged",
     "commitmsg": "commitlint -e",
-    "postcomit": "git reset",
+    "postcommit": "git reset",
     "prepush": "npm test",
     "postmerge": "npm install && npm prune",
     "postrewrite": "npm install && npm prune",
