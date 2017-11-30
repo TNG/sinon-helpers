@@ -6,10 +6,11 @@ notifications:
   email: true
 node_js:
   - 'node'
-  - '4'
+  - '6'
 before_install:
   - npm i -g npm@5
 before_script:
+  - npm prune
   - npm run build
 script:
   - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
