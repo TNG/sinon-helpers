@@ -4,8 +4,7 @@
   "author": "Lukas Taegert <lukas.taegert@tngtech.com>",
   "license": "MIT",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "jsnext:main": "dist/index.mjs",
+  "module": "dist/index.esm.js",
   "files": [
     "dist"
   ],
