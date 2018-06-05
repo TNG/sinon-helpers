@@ -54,7 +54,8 @@
     "rollup": "^0.59.4",
     "rollup-plugin-babel": "^3.0.4",
     "semantic-release": "^15.5.0",
-    "sinon": "^5.0.10"
+    "sinon": "^5.0.10",
+    "travis-deploy-once": "^5.0.0"
   },
   "scripts": {
     "build": "rollup -c",
@@ -66,7 +67,8 @@
     "prepush": "npm test",
     "postmerge": "npm install && npm prune",
     "postrewrite": "npm install && npm prune",
-    "semantic-release": "npm run build && semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "lint-staged": {
     "*.js": [
