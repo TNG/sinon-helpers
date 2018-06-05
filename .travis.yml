@@ -1,4 +1,3 @@
-sudo: false
 language: node_js
 cache:
   directories:
@@ -10,15 +9,14 @@ node_js:
   - '8'
   - '6'
 before_install:
-  - npm i -g npm@~4.0.0
+  - npm i -g npm@5
 before_script:
-  - npm prune
   - npm run build
 script:
   - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
   - codecov
 after_success:
-  - npm run semantic-release
+  - npm run travis-deploy-once "npm run semantic-release"
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
