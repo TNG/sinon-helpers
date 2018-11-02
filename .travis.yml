@@ -1,21 +1,24 @@
 language: node_js
-cache:
-  directories:
-    - ~/.npm
 node_js:
-  - 'node'
-  - '10'
-  - '8'
-  - '6'
-before_install:
-  - npm i -g npm@5
-before_script:
-  - npm run build
-script:
-  - istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
-  - codecov
-after_success:
-  - npm run travis-deploy-once "npm run semantic-release"
+- node
+- 10
+- 8
+- 6
+
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/
+  - /^v\d+\.\d+\.\d+$/
+
+script:
+- istanbul cover ./node_modules/.bin/_mocha --report lcovonly -- -R spec
+- codecov
+
+jobs:
+  include:
+  - stage: release
+    node_js: node
+    deploy:
+      provider: script
+      skip_cleanup: true
+      script:
+      - npx semantic-release
