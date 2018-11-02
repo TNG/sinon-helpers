@@ -2,7 +2,7 @@
   "name": "sinon-helpers",
   "description": "Create easily configurable sinon stubs that mimic constructors and keep track of their instances",
   "author": "Lukas Taegert <lukas.taegert@tngtech.com>",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "files": [
