@@ -10,7 +10,7 @@ branches:
   - /^v\d+\.\d+\.\d+$/
 
 before_install:
-  - NPM_VERSION=$(npm -v);if [[ ${NPM_VERSION:0:1} -lt 5 ]]; then npm install --global npm@5; fi
+- NPM_VERSION=$(npm -v);if [[ ${NPM_VERSION:0:1} -lt 5 ]]; then npm install --global npm@5; fi
 
 jobs:
   include:
