@@ -61,6 +61,7 @@
     "build": "rollup -c",
     "test": "npm run build && mocha",
     "lint": "prettier-standard *.js src/**/*.js test/**/*.js && eslint --fix *.js src/**/*.js test/**/*.js",
+    "prepare": "npm run build",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once"
   },
