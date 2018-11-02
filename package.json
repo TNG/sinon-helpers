@@ -26,16 +26,12 @@
   "peerDependencies": {
     "sinon": ">=1.15.0"
   },
-  "dependencies": {
-    "fluent-arguments": "^1.1.0",
-    "ramda": "^0.25.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@commitlint/cli": "^7.2.1",
     "@commitlint/config-angular": "^7.1.2",
     "babel-core": "^6.26.3",
     "babel-plugin-external-helpers": "^6.22.0",
-    "babel-plugin-ramda": "^1.6.3",
     "babel-preset-env": "^1.7.0",
     "chai": "^4.2.0",
     "eslint": "^5.8.0",

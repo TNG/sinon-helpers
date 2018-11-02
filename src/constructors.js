@@ -1,6 +1,3 @@
-import { createFunc } from 'fluent-arguments'
-import { compose, filter, forEach } from 'ramda'
-
 const getArrayFromArrayLikeObject = args => Array.prototype.slice.call(args)
 
 const isMethod = object => propName =>
@@ -9,9 +6,9 @@ const isMethod = object => propName =>
   !(propName === 'constructor')
 
 const applyToEachFunctionKeyInObject = (appliedFunction, object) =>
-  compose(forEach(appliedFunction), filter(isMethod(object)))(
-    Object.getOwnPropertyNames(object)
-  )
+  Object.getOwnPropertyNames(object)
+    .filter(isMethod(object))
+    .forEach(appliedFunction)
 
 const applyToEachFunctionKeyInPrototypeChain = (appliedFunction, object) => {
   if (object) {
@@ -45,48 +42,43 @@ const getInstanceIndexWithValidation = (index, numInstances) => {
 
 export default /* tree-shaking no-side-effects-when-called */ getConstructorProperties => Target => {
   const constructorProps = getConstructorProperties(Target)
-  const instances = []
-  const instanceArgs = []
-  let methodParams = []
-  let afterCreation
+  let init
 
   function StubOrSpyConstructor () {
     constructorProps.SourceConstructor.apply(this, arguments)
-    instanceArgs.push(getArrayFromArrayLikeObject(arguments))
-    instances.push(this)
+    StubOrSpyConstructor.args.push(getArrayFromArrayLikeObject(arguments))
+    if (this instanceof StubOrSpyConstructor) {
+      StubOrSpyConstructor.instances.push(this)
 
-    Target &&
-      applyToEachFunctionKeyInPrototypeChain(
-        constructorProps.processMethodOfInstance(this),
-        constructorProps.getInstanceMethodNameSource(this)
-      )
-    methodParams.forEach(constructorProps.configureMethodOfInstance(this))
-    afterCreation && afterCreation(this)
+      Target &&
+        applyToEachFunctionKeyInPrototypeChain(
+          constructorProps.processMethodOfInstance(this),
+          constructorProps.getInstanceMethodNameSource(this)
+        )
+      init && init(this)
+    } else {
+      StubOrSpyConstructor.instances.push(null)
+    }
   }
 
   StubOrSpyConstructor.prototype = constructorProps.SourceConstructor.prototype
 
-  StubOrSpyConstructor[constructorProps.addMethodsKey] = createFunc(function (
-    methods
-  ) {
-    methodParams = methods
-    return this
-  })
-
-  StubOrSpyConstructor.afterCreation = function (onAfterCreation) {
-    afterCreation = onAfterCreation
+  StubOrSpyConstructor.withInit = function (onInit) {
+    init = onInit
     return this
   }
 
-  StubOrSpyConstructor.getInstances = () => instances
+  StubOrSpyConstructor.instances = []
 
-  StubOrSpyConstructor.getInstance = index =>
-    instances[getInstanceIndexWithValidation(index, instances.length)]
+  StubOrSpyConstructor.getInstance = index => {
+    const validatedIndex = getInstanceIndexWithValidation(
+      index,
+      StubOrSpyConstructor.instances.length
+    )
+    return StubOrSpyConstructor.instances[validatedIndex]
+  }
 
-  StubOrSpyConstructor.getInstancesArgs = () => instanceArgs
-
-  StubOrSpyConstructor.getInstanceArgs = index =>
-    instanceArgs[getInstanceIndexWithValidation(index, instances.length)]
+  StubOrSpyConstructor.args = []
 
   Target &&
     applyToEachFunctionKeyInObject(

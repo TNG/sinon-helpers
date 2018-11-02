@@ -8,6 +8,8 @@ Create easily configurable [sinon](https://github.com/sinonjs/sinon) stubs that 
 [![David](https://img.shields.io/david/TNG/sinon-helpers.svg?maxAge=3600)](https://david-dm.org/TNG/sinon-helpers)
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?maxAge=3600)](https://github.com/semantic-release/semantic-release)
 
+If updating from v1, please see [updating from v1 to v2](#migrating-from-v1-to-v2).
+
 ## Motivation
 
 Especially when working with the new ES6 classes, a common problem in unit testing is to find out if a module creates
@@ -24,7 +26,7 @@ testing. The question remains how the stated goal can be achieved using a mockin
 
 In the examples, we want to mock a constructor `MyConstructor`.
 
-### Simple approaches
+### Approaches without `sinon-helpers`
 
 * Replace `MyConstructor` by `sinon.stub(MyConstructor)`. That way, we can find out which parameters are used to create
 instances. The instances, however, will feature none of the methods of `MyConstructor`.
@@ -41,16 +43,9 @@ offers an easy and generic solution to this problem.
 
 ### What **sinon-helpers** offers
 
-* `MyStubConstructor = getStubConstructor(MyConstructor)` generates a new constructor using `MyConstrucor` as a
-template. That means that new instances will contain all methods of `MyConstructor` as stubs including inherited and
-non-enumerable methods but skipping getters.
-* `MyStubConstructor.getInstances()` returns an array of all instances that have been created using this constructor.
-If you expect only a single instance to be created, you can retrieve it directly via `MyStubConstructor.getInstance()`,
-which will also throw an error if more than one or no instance has been created.
-Thus you can test for all instances separately which methods have been invoked in which way.
-* `MyStubConstructor.getInstancesArgs()` returns an array of arrays of arguments used to create the instances.
-* There is a simple way to define return values for methods and you can even define that a method returns its
-`this`-value if you need to stub a [fluent interface](https://en.wikipedia.org/wiki/Fluent_interface).
+* `MyStubConstructor = getStubConstructor(MyConstructor)` generates a new constructor using `MyConstrucor` as a template. This means that new instances will contain all methods of `MyConstructor` as stubs including inherited and non-enumerable methods but skipping getters.
+* `MyStubConstructor.instances` holds an array of all instances that have been created using this constructor. If you expect only a single instance to be created, you can retrieve it directly via `MyStubConstructor.getInstance()`, which will also throw an error if more than one or no instance has been created. Thus you can test for all instances separately which methods have been invoked in which way.
+* `MyStubConstructor.args` returns an array of arrays of arguments used to create the instances.
 * As the prototype is not modified, you do not have to clean up your stubs after the test!
 
 ## Installation
@@ -65,141 +60,73 @@ yarn add --dev sinon-helpers
 ```
 
 ## Usage
-```javascript
+```js
 var sh = require('sinon-helpers') // CommonJS
 import * as sh from 'sinon-helpers' // ES6
-// alternative: import {getStubConstructor, getSpyConstructor, returning} from 'sinon-helpers'
+// alternative: import {getStubConstructor, getSpyConstructor} from 'sinon-helpers'
 
 // Create a constructor mimicking a given constructor
 var MyStubConstructor = sh.getStubConstructor(MyConstructor)
 
-// You may also add new methods and provide return values to existing methods
-MyStubConstructor = MyStubConstructor.withMethods('method1', sh.returning(1), 'method2', sh.returningThis)
+// You can initialize your stub to e.g. provide return values for your methods
+// or add fields that are not part of the prototype
+var MyStubConstructor = sh.getStubConstructor(MyConstructor)
+  .withInit(instance => {
+    // this assumes MyConstructor.prototype.myMethod exists
+    instance.myMethod.returns(42)
+    instance.additionalField = 'added'
+  })
 
 // Create a constructor that calls through to the original constructor
-// with spies on all methods and having a few methods stubbed
-var MySpyConstructor = sh.getSpyConstructor(MyConstructor).withStubs('method1', 'method2', sh.returning(true))
-
-// Create an object with the given methods as stubs
-var myMethods = sh.getMethodStubs('method1', 'method2', sh.returning('Hello'))
+// with spies on all methods instead of stubs
+var MySpyConstructor = sh.getSpyConstructor(MyConstructor)
 ```
 
 ## API
 ### `getStubConstructor(<OriginalConstructor>)`
-Returns a [`StubConstructor`](#stubconstructor-api) mimicking the given constructor `OriginalConstructor`. When called
-with `new`, this constructor creates an object with stubs for any methods of the prototype object of `ConstructorName`.
-If you call `getStubConstructor` without any arguments, you receive a StubConstructor without any pre-defined methods.
-Any `StubConstructor` features several methods to add methods and query created instances.
+Returns a [`StubConstructor`](#stubconstructor-api) mimicking the given constructor `OriginalConstructor`. When called with `new`, this constructor creates an object with stubs for any methods of the prototype object of `ConstructorName`.
+
+If you call `getStubConstructor` without any arguments, you receive a StubConstructor without any pre-defined methods. A `StubConstructor` features methods to configure and query the created instances.
 
 ### `StubConstructor` API
-A `StubConstructor` has the following methods:
-* `.withMethods('method1' <,'method2' <...>>)`  
-  Instances should have the listed additional methods as stubs. Returns the `StubConstructor` so you can assign
-    
-  ```javascript
-  var Stub = getStubConstructor(MyConstructor).withMethods('myMethod')
-  ```
-    
-  `.withMethods` also [allows you to specify method return values](#specifying-stub-return-values), see below.
-* `.afterCreation(onAfterCreation)`  
-  When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
-  enables you to perform manual post-processing like adding additional fields before the instance is returned.
-* `.getInstances()`   
-  Returns an array of instances created with the stub constructor.
+A `StubConstructor` has the following methods and fields:
+* `.withInit(onInit)`  
+  Each time a new instance is created, `onInit(instance)` is called receiving the new instance as parameter; this enables you to perform manual post-processing like configuring return values and adding additional fields before the instance is returned.
+* `.instances`  
+  An array of all instances created with the stub constructor. Contains `null` if the constructor is called without `new`.
 * `.getInstance()`  
   Throws an error if no or more than one instance has been created. Otherwise, returns the instance created.
 * `.getInstance(index)`  
   Throws an error if not at least `index` instances have been created. Otherwise, returns the instance `index`.
-* `.getInstancesArgs()`  
-  Returns an array of arrays containing the arguments of each instance creation.
-* `.getInstanceArgs()`  
-  Throws an error if no or more than one instance has been created. Otherwise, returns the arguments with which the
-  instance has been created.
-* `.getInstanceArgs(index)`  
-  Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
-  instance `index` has been created.
+* `.args`  
+  An array of arrays containing the arguments of each constructor call.
 
 ### `getSpyConstructor(OriginalConstructor)`
-Returns a [`SpyConstructor`](#spyconstructor-api) of the given constructor `OriginalConstructor`. A `SpyConstructor` is
-similar to a `StubConstructor` except for the following differences:
+Returns a [`SpyConstructor`](#spyconstructor-api) of the given constructor `OriginalConstructor`. A `SpyConstructor` is similar to a `StubConstructor` except for the following differences:
 * The `OriginalConstructor` is called when creating a new instance.
-* Methods are not stubbed but spied on (but you may manually stub some methods).
-* Which methods are spied on is not determined by looking at the prototype but by looking at what methods are actually
-present after the constructor has run.
+* Methods are not stubbed but spied on.
+* Which methods are spied on is not determined by looking at the prototype but by looking at what methods are actually present after the original constructor has run.
 
-This is useful if you need to preserve the constructor's functionality while being able to track its instances. Note
-however that having to rely on `SpyConstructor`s instead of `StubConstructor`s may be an indication of strong couplings
-in you software that are generally a sign that your architecture could be improved.
+This is useful if you need to preserve the constructor's functionality while being able to track its instances. Note however that having to rely on `SpyConstructor`s instead of `StubConstructor`s may be an indication of strong couplings in your software that are generally a sign that your architecture could be improved.
 
 ### `SpyConstructor` API
-A `SpyConstructor` has the following methods:
-* `.withStubs('method1' <,'method2' <...>>)`  
-  Instead of spied on, instances should have the listed methods as stubs. If these methods do not exist, an error will
-  be thrown. Returns the `SpyConstructor` so you can assign
-  
-  ```javascript
-  var Spy = getSpyConstructor(MyConstructor).withStubs('myMethod')
-  ```
-  
-  `.withStubs` also [allows you to specify stub return values](#specifying-stub-return-values), see below.
-* `.afterCreation(onAfterCreation)`  
-  When a new instance is created, `onAfterCreation(instance)` is called receiving the new instance as parameter; this
-  enables you to perform manual post-processing like adding additional fields before the instance is returned.
-* `.getInstances()`   
-  Returns an array of instances created with the spy constructor.
+A `SpyConstructor` has the following methods and fields:
+* `.withInit(onInit)`  
+  When a new instance is created, `onInit(instance)` is called receiving the new instance as parameter; this enables you to perform manual post-processing before the instance is returned.
+* `.instances`   
+  An array of all instances created with the spy constructor. Contains `null` if the constructor is called without `new`.
 * `.getInstance()`  
   Throws an error if no or more than one instance has been created. Otherwise, returns the instance created.
 * `.getInstance(index)`  
   Throws an error if not at least `index` instances have been created. Otherwise, returns the instance `index`.
-* `.getInstancesArgs()`  
-  Returns an array of arrays containing the arguments of each instance creation.
-* `.getInstanceArgs()`  
-  Throws an error if no or more than one instance has been created. Otherwise, returns the arguments with which the
-  instance has been created.
-* `.getInstanceArgs(index)`  
-  Throws an error if not at least `index` instances have been created. Otherwise, returns the arguments with which
-  instance `index` has been created.
-
-### `getMethodStubs(methodName1 <, methodName2 ...>)`
-Returns an object containing the given methods as stubs. Again, `getMethodStubs`
-[allows you to specify stub return values](#specifying-stub-return-values).
-
-### Specifying stub return values
-`sinon-helpers` allows you to specify return values for any created stub methods:
-
-```javascript
-var Stub = sh.getStubConstructor(MyConstructor).withMethods(
-             'method1', sh.returning(3),
-             'method2', sh.returningThis,
-             'method3'
-           )
-```
-
-This creates a `StubConstructor` where any instance has the three methods `.method1()`, `.method2()` and `.method3()`.
-`.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`. This
-can also be used to add return values to prototype methods. This also works with `SpyConstrucor`s:
-
-```javascript
-var Spy = sh.getSpyConstructor(MyConstructor).withStubs(
-             'method1', sh.returning(3),
-             'method2', sh.returningThis,
-             'method3'
-           )
-```
-
-This creates a `SpyConstructor` where for any instance, `.method1()`, `.method2()` and `.method3()` are stubbed, and
-`.method1()` always returns `3`, `.method2()` returns its `this` value and `.method3()` returns `undefined`.  
-With `getMethodStubs()`, you can do the same:
-
-```javascript
-var methodStubs = sh.getMethodStubs(
-                     'method1', sh.returning(3),
-                     'method2', sh.returningThis,
-                     'method3'
-                  )
-```
+* `.args`  
+  An array of arrays containing the arguments of each constructor call.
+  
+## Migrating from v1 to v2
+* Instead of `getInstances()`, use `instances` to access the array of instances.
+* Instead of `getInstancesArgs()`, use `args` to access the arguments used to create instances.
+* `afterCreation()` is now called `withInit()`.
+* `withMethods`, `withStubs`: These methods have been removed in favour of using `withInit()`, which is much more powerful.
 
 ## Contributing
-
-Feel like this library could do more for you? Found an issue with your setup? Want to get involved? Then why not
-[contribute](./CONTRIBUTING.md) by raising an issue or creating a pull-request!
+Feel like this library could do more for you? Found an issue with your setup? Want to get involved? Then why not [contribute](./CONTRIBUTING.md) by raising an issue or creating a pull-request!

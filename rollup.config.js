@@ -16,7 +16,7 @@ export default {
           }
         ]
       ],
-      plugins: ['ramda', 'external-helpers']
+      plugins: ['external-helpers']
     })
   ],
   output: [

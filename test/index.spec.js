@@ -4,9 +4,6 @@
 var sinonHelpers = require('../dist/index')
 var getStubConstructor = sinonHelpers.getStubConstructor
 var getSpyConstructor = sinonHelpers.getSpyConstructor
-var getMethodStubs = sinonHelpers.getMethodStubs
-var returning = sinonHelpers.returning
-var returningThis = sinonHelpers.returningThis
 
 var expect = require('chai').expect
 var sinon = require('sinon')
@@ -60,23 +57,25 @@ beforeEach(function () {
   })
 
   TestConstructor = function () {
-    this.args = Array.prototype.slice.call(arguments)
-    this.field3 = function () {
-      return 3
-    }
-    this.field4 = sinon.stub()
-    Object.defineProperty(this, 'getter', {
-      get: function () {
-        throw new Error('getter was evaluated')
+    if (this instanceof TestConstructor) {
+      this.args = Array.prototype.slice.call(arguments)
+      this.field3 = function () {
+        return 3
       }
-    })
+      this.field4 = sinon.stub()
+      Object.defineProperty(this, 'getter', {
+        get: function () {
+          throw new Error('getter was evaluated')
+        }
+      })
+    }
   }
 
   TestConstructor.prototype = testPrototype
-  TestConstructor.instanceMethod1 = function () {
+  TestConstructor.classMethod1 = function () {
     return 'i1'
   }
-  TestConstructor.instanceMethod2 = sinon.stub()
+  TestConstructor.classMethod2 = sinon.stub()
 })
 
 afterEach(function () {
@@ -105,16 +104,10 @@ describe('getStubConstructor', function () {
     expect(stubbedObject.field3).to.be.undefined
   })
 
-  it('should create stubs for all instance methods', function () {
-    expect(StubConstructor.instanceMethod1).to.have.property(
-      'isSinonProxy',
-      true
-    )
-    expect(StubConstructor.instanceMethod1()).to.be.undefined
-    expect(StubConstructor.instanceMethod2).to.have.property(
-      'isSinonProxy',
-      true
-    )
+  it('should create stubs for all class methods', function () {
+    expect(StubConstructor.classMethod1).to.have.property('isSinonProxy', true)
+    expect(StubConstructor.classMethod1()).to.be.undefined
+    expect(StubConstructor.classMethod2).to.have.property('isSinonProxy', true)
   })
 
   it('should create an empty constructor if no arguments are supplied', function () {
@@ -122,44 +115,6 @@ describe('getStubConstructor', function () {
     var stubbedObject = new StubConstructor()
 
     expect(stubbedObject).to.be.an('object')
-  })
-
-  describe('withMethods', function () {
-    it('should allow specifying additional methods', function () {
-      StubConstructor = StubConstructor.withMethods('m1', 'm2')
-      var stubbedObject = new StubConstructor()
-
-      expect(stubbedObject.m1).to.be.a('function', 'm1')
-      expect(stubbedObject.m2).to.be.a('function', 'm2')
-    })
-
-    it('should allow specifying method return values', function () {
-      StubConstructor = StubConstructor.withMethods(
-        'm1',
-        returning(1),
-        'field1',
-        returning(2),
-        'm2'
-      )
-      var stubbedObject = new StubConstructor()
-
-      expect(stubbedObject.m1()).to.equal(1, 'm1')
-      expect(stubbedObject.field1()).to.equal(2, 'field1')
-      expect(stubbedObject.m2()).to.be.undefined
-    })
-
-    it('should allow for methods to return their this value', function () {
-      StubConstructor = StubConstructor.withMethods(
-        'm1',
-        returningThis,
-        'field1',
-        returningThis,
-        'm2'
-      )
-      var stubbedObject = new StubConstructor()
-
-      expect(stubbedObject.m1().field1().m2).to.be.a('function')
-    })
   })
 })
 
@@ -201,58 +156,10 @@ describe('getSpyConstructor', function () {
     expect(spiedObject.proto2).to.have.property('isSinonProxy', true, 'proto2')
   })
 
-  it('should spy on all instance methods', function () {
-    expect(SpyConstructor.instanceMethod1).to.have.property(
-      'isSinonProxy',
-      true
-    )
-    expect(SpyConstructor.instanceMethod1()).to.equal('i1')
-    expect(SpyConstructor.instanceMethod2).to.have.property(
-      'isSinonProxy',
-      true
-    )
-  })
-
-  describe('withStubs', function () {
-    it('should allow stubbing methods', function () {
-      SpyConstructor = SpyConstructor.withStubs('field1', 'field3', 'proto1')
-      var spiedObject = new SpyConstructor()
-
-      expect(spiedObject.field1).to.have.property('isSinonProxy', true)
-      expect(spiedObject.field3).to.have.property('isSinonProxy', true)
-      expect(spiedObject.proto1).to.have.property('isSinonProxy', true)
-      expect(spiedObject.field1()).to.be.undefined
-      expect(spiedObject.field3()).to.be.undefined
-      expect(spiedObject.proto1()).to.be.undefined
-    })
-
-    it('should allow specifying stub return values', function () {
-      SpyConstructor = SpyConstructor.withStubs(
-        'field1',
-        returning(10),
-        'field3',
-        returning(20),
-        'proto1'
-      )
-      var spiedObject = new SpyConstructor()
-
-      expect(spiedObject.field1()).to.equal(10, 'field1')
-      expect(spiedObject.field3()).to.equal(20, 'field3')
-      expect(spiedObject.proto1()).to.be.undefined
-    })
-
-    it('should allow for methods to return their this value', function () {
-      SpyConstructor = SpyConstructor.withStubs(
-        'field1',
-        returningThis,
-        'field3',
-        returningThis,
-        'proto1'
-      )
-      var spiedObject = new SpyConstructor()
-
-      expect(spiedObject.field1().field3().proto1).to.be.a('function')
-    })
+  it('should spy on all class methods', function () {
+    expect(SpyConstructor.classMethod1).to.have.property('isSinonProxy', true)
+    expect(SpyConstructor.classMethod1()).to.equal('i1')
+    expect(SpyConstructor.classMethod2).to.have.property('isSinonProxy', true)
   })
 })
 
@@ -281,35 +188,39 @@ describe('getSpy- and getStubConstructor', function () {
         expect(instance).to.be.an.instanceof(NewConstructor)
       })
 
-      describe('afterCreation', function () {
+      describe('withInit', function () {
         it('should allow for manual post-processing before an instance is created', function () {
-          NewConstructor.afterCreation(function (instance) {
+          NewConstructor.withInit(function (instance) {
             instance.extraField = 7
+            instance.returnSelf = sinon.stub().callsFake(() => instance)
           })
           var instance = new NewConstructor()
           expect(instance.extraField).to.equal(7)
+          expect(instance.returnSelf().returnSelf()).to.equal(instance)
         })
 
         it('should return the constructor', function () {
           expect(
-            NewConstructor.afterCreation(function (instance) {
+            NewConstructor.withInit(function (instance) {
               instance.extraField = 7
             })
           ).to.equal(NewConstructor)
         })
       })
 
-      describe('getInstances', function () {
-        it('should return an empty list if there are no instances', function () {
-          expect(NewConstructor.getInstances()).to.deep.equal([])
+      describe('instances', function () {
+        it('should be an empty list if there are no instances', function () {
+          expect(NewConstructor.instances).to.deep.equal([])
         })
 
-        it('should return a list of instances', function () {
+        it('should be a list of instances with null for non-constructor calls', function () {
           var instance1 = new NewConstructor()
+          NewConstructor()
           var instance2 = new NewConstructor()
 
-          expect(NewConstructor.getInstances()).to.deep.equal([
+          expect(NewConstructor.instances).to.deep.equal([
             instance1,
+            null,
             instance2
           ])
         })
@@ -349,92 +260,23 @@ describe('getSpy- and getStubConstructor', function () {
         })
       })
 
-      describe('getInstancesArgs', function () {
-        it('should return an empty list if there are no instances', function () {
-          expect(NewConstructor.getInstancesArgs()).to.deep.equal([])
+      describe('args', function () {
+        it('should be an empty list if there are no instances', function () {
+          expect(NewConstructor.args).to.deep.equal([])
         })
 
-        it('should return a list of constructor arguments', function () {
+        it('should be a list of constructor arguments', function () {
           new NewConstructor('foo', 'bar')
+          NewConstructor('pi', 'biz')
           new NewConstructor('baz', 'bla')
 
-          expect(NewConstructor.getInstancesArgs()).to.deep.equal([
+          expect(NewConstructor.args).to.deep.equal([
             ['foo', 'bar'],
+            ['pi', 'biz'],
             ['baz', 'bla']
           ])
         })
       })
-
-      describe('getInstanceArgs', function () {
-        it('should return the arguments of a single instance if one has been created', function () {
-          new NewConstructor('foo', 'bar')
-          expect(NewConstructor.getInstanceArgs()).to.deep.equal(['foo', 'bar'])
-        })
-
-        it('should throw an error if no instance has been created', function () {
-          expect(NewConstructor.getInstanceArgs).to.throw(/0 instances/)
-        })
-
-        it('should throw an error if more than one instance has been created', function () {
-          new NewConstructor('foo', 'bar')
-          new NewConstructor('baz', 'bla')
-
-          expect(NewConstructor.getInstanceArgs).to.throw(/2 instances/)
-        })
-
-        it('should return the arguments of an instance with a given index', function () {
-          new NewConstructor('foo', 'bar')
-          new NewConstructor('baz', 'bla')
-
-          expect(NewConstructor.getInstanceArgs(1)).to.deep.equal([
-            'baz',
-            'bla'
-          ])
-        })
-
-        it('should throw an error if not enough instances exist', function () {
-          new NewConstructor('foo', 'bar')
-
-          expect(function () {
-            NewConstructor.getInstanceArgs(1)
-          }).to.throw(/1 instances/)
-        })
-      })
     })
-  })
-})
-
-describe('getMethodStubs', function () {
-  it('should create an object with stubs', function () {
-    var methodStubs = getMethodStubs('method1', 'method2')
-
-    expect(methodStubs.method1.isSinonProxy).to.be.true
-    expect(methodStubs.method2.isSinonProxy).to.be.true
-  })
-
-  it('should allow specifying stub return values', function () {
-    var methodStubs = getMethodStubs(
-      'method1',
-      returning(10),
-      'method2',
-      returning(20),
-      'method3'
-    )
-
-    expect(methodStubs.method1()).to.equal(10, 'method1')
-    expect(methodStubs.method2()).to.equal(20, 'method2')
-    expect(methodStubs.method3()).to.be.undefined
-  })
-
-  it('should allow for methods to return their this value', function () {
-    var methodStubs = getMethodStubs(
-      'method1',
-      returningThis,
-      'method2',
-      returningThis,
-      'method3'
-    )
-
-    expect(methodStubs.method1().method2().method3).to.be.a('function')
   })
 })
