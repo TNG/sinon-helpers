@@ -35,14 +35,13 @@ const getSpyConstructorProperties = Target => ({
   SourceConstructor: Target,
   processMethodOfInstance: spyOnMethod,
   getInstanceMethodNameSource: instance => instance,
-  processMethodOfConstructor: TheConstructor =>
-    copyAndSpyOnMethod(TheConstructor, Target)
+  processMethodOfConstructor: TheConstructor => copyAndSpyOnMethod(TheConstructor, Target)
 })
 
-export const getStubConstructor = getStubOrSpyConstructor(
+export const getStubConstructor = /* @__PURE__ */ getStubOrSpyConstructor(
   getStubConstructorProperties
 )
 
-export const getSpyConstructor = getStubOrSpyConstructor(
+export const getSpyConstructor = /* @__PURE__ */ getStubOrSpyConstructor(
   getSpyConstructorProperties
 )

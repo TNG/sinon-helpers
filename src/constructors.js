@@ -13,10 +13,7 @@ const applyToEachFunctionKeyInObject = (appliedFunction, object) =>
 const applyToEachFunctionKeyInPrototypeChain = (appliedFunction, object) => {
   if (object) {
     applyToEachFunctionKeyInObject(appliedFunction, object)
-    applyToEachFunctionKeyInPrototypeChain(
-      appliedFunction,
-      Object.getPrototypeOf(object)
-    )
+    applyToEachFunctionKeyInPrototypeChain(appliedFunction, Object.getPrototypeOf(object))
   }
 }
 

@@ -4,19 +4,17 @@ import babel from 'rollup-plugin-babel'
 
 export default {
   input: 'src/index.js',
-  external: id =>
-    /ramda/.test(id) || ['sinon', 'fluent-arguments'].indexOf(id) >= 0,
+  external: ['sinon'],
   plugins: [
     babel({
       presets: [
         [
-          'env',
+          '@babel/preset-env',
           {
             modules: false
           }
         ]
-      ],
-      plugins: ['external-helpers']
+      ]
     })
   ],
   output: [
