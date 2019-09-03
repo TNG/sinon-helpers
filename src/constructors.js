@@ -23,7 +23,7 @@ const getInstanceIndexWithValidation = (index, numInstances) => {
   if (typeof index === 'undefined') {
     if (numInstances > 1) {
       throw new Error(
-        `Tried to access only instance of StubConstructor, ` +
+        'Tried to access only instance of StubConstructor, ' +
           `but there were ${numInstances} instances.`
       )
     }
