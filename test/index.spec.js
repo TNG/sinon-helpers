@@ -266,7 +266,11 @@ describe('getSpy- and getStubConstructor', function () {
           NewConstructor('pi', 'biz')
           new NewConstructor('baz', 'bla')
 
-          expect(NewConstructor.args).to.deep.equal([['foo', 'bar'], ['pi', 'biz'], ['baz', 'bla']])
+          expect(NewConstructor.args).to.deep.equal([
+            ['foo', 'bar'],
+            ['pi', 'biz'],
+            ['baz', 'bla']
+          ])
         })
       })
     })

@@ -5,6 +5,9 @@
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
+  "engines": {
+    "node": ">=10.0.0"
+  },
   "files": [
     "dist"
   ],
@@ -27,26 +30,23 @@
     "sinon": ">=1.15.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.5",
-    "@babel/preset-env": "^7.7.6",
-    "@commitlint/cli": "^8.2.0",
-    "@commitlint/config-angular": "^8.2.0",
+    "@commitlint/cli": "^9.1.2",
+    "@commitlint/config-angular": "^9.1.1",
     "chai": "^4.2.0",
-    "eslint": "^6.7.2",
-    "eslint-config-standard": "^14.1.0",
-    "eslint-plugin-import": "^2.19.1",
-    "eslint-plugin-node": "^10.0.0",
+    "eslint": "^7.5.0",
+    "eslint-config-standard": "^14.1.1",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
-    "eslint-plugin-tree-shaking": "^1.7.4",
-    "husky": "^3.1.0",
-    "lint-staged": "^9.5.0",
-    "mocha": "^6.2.2",
-    "prettier-standard": "^14.1.1",
-    "rollup": "^1.27.12",
-    "rollup-plugin-babel": "^4.3.3",
-    "semantic-release": "^15.13.31",
-    "sinon": "^7.5.0"
+    "eslint-plugin-tree-shaking": "^1.8.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "mocha": "^8.1.0",
+    "prettier-standard": "^16.4.1",
+    "rollup": "^2.23.0",
+    "semantic-release": "^17.1.1",
+    "sinon": "^9.0.2"
   },
   "scripts": {
     "build": "rollup -c",

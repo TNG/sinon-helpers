@@ -1,7 +1,7 @@
 {
   "hooks": {
     "pre-commit": "lint-staged",
-    "commit-msg": "commitlint -e",
+    "commit-msg": "commitlint --edit ./.git/COMMIT_EDITMSG",
     "post-commit": "git reset",
     "pre-push": "npm test",
     "post-checkout": "npm install",
