@@ -1,19 +1,19 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions,no-new,tree-shaking/no-side-effects-in-initialization */
 
-var sinonHelpers = require('../dist/index')
-var getStubConstructor = sinonHelpers.getStubConstructor
-var getSpyConstructor = sinonHelpers.getSpyConstructor
+const sinonHelpers = require('../dist/index')
+const getStubConstructor = sinonHelpers.getStubConstructor
+const getSpyConstructor = sinonHelpers.getSpyConstructor
 
-var expect = require('chai').expect
-var sinon = require('sinon')
+const expect = require('chai').expect
+const sinon = require('sinon')
 
-var TestConstructor
+let TestConstructor
 
 beforeEach(function () {
   global.sinon = sinon
 
-  var testPrototype2 = {
+  const testPrototype2 = {
     proto2: function () {
       return 'p2'
     },
@@ -22,7 +22,7 @@ beforeEach(function () {
     }
   }
 
-  var testPrototype1 = Object.create(testPrototype2, {
+  const testPrototype1 = Object.create(testPrototype2, {
     proto1: {
       writable: true,
       enumerable: false,
@@ -39,7 +39,7 @@ beforeEach(function () {
     }
   })
 
-  var testPrototype = Object.create(testPrototype1, {
+  const testPrototype = Object.create(testPrototype1, {
     field1: {
       writable: true,
       enumerable: true,
@@ -83,14 +83,14 @@ afterEach(function () {
 })
 
 describe('getStubConstructor', function () {
-  var StubConstructor
+  let StubConstructor
 
   beforeEach(function () {
     StubConstructor = getStubConstructor(TestConstructor)
   })
 
   it('should return a constructor that creates an object with all methods of the prototype object', function () {
-    var stubbedObject = new StubConstructor()
+    const stubbedObject = new StubConstructor()
 
     expect(stubbedObject.field1).to.be.a('function', 'field1')
     expect(stubbedObject.field2).to.be.a('function', 'field2')
@@ -99,7 +99,7 @@ describe('getStubConstructor', function () {
   })
 
   it('should not call through to the original constructor', function () {
-    var stubbedObject = new StubConstructor()
+    const stubbedObject = new StubConstructor()
 
     expect(stubbedObject.field3).to.be.undefined
   })
@@ -112,21 +112,21 @@ describe('getStubConstructor', function () {
 
   it('should create an empty constructor if no arguments are supplied', function () {
     StubConstructor = getStubConstructor()
-    var stubbedObject = new StubConstructor()
+    const stubbedObject = new StubConstructor()
 
     expect(stubbedObject).to.be.an('object')
   })
 })
 
 describe('getSpyConstructor', function () {
-  var SpyConstructor
+  let SpyConstructor
 
   beforeEach(function () {
     SpyConstructor = getSpyConstructor(TestConstructor)
   })
 
   it('should return a constructor that creates an object with all methods the constructor creates', function () {
-    var spiedObject = new SpyConstructor()
+    const spiedObject = new SpyConstructor()
 
     expect(spiedObject.field1()).to.equal(1)
     expect(spiedObject.field2()).to.equal(2)
@@ -136,17 +136,17 @@ describe('getSpyConstructor', function () {
   })
 
   it('should create instances of the original constructor', function () {
-    var spiedObject = new SpyConstructor()
+    const spiedObject = new SpyConstructor()
     expect(spiedObject).to.be.an.instanceof(TestConstructor)
   })
 
   it('should create instances using the right arguments', function () {
-    var spiedObject = new SpyConstructor('Var 1', 2)
+    const spiedObject = new SpyConstructor('Var 1', 2)
     expect(spiedObject.args).to.deep.equal(['Var 1', 2])
   })
 
   it('should put spies on all methods', function () {
-    var spiedObject = new SpyConstructor()
+    const spiedObject = new SpyConstructor()
 
     expect(spiedObject.field1).to.have.property('isSinonProxy', true, 'field1')
     expect(spiedObject.field2).to.have.property('isSinonProxy', true, 'field2')
@@ -164,7 +164,7 @@ describe('getSpyConstructor', function () {
 })
 
 describe('getSpy- and getStubConstructor', function () {
-  var dataProvider = [
+  const dataProvider = [
     {
       description: 'getStubConstrucor',
       getConstructor: getStubConstructor
@@ -177,14 +177,14 @@ describe('getSpy- and getStubConstructor', function () {
 
   dataProvider.forEach(function (testData) {
     describe(testData.description, function () {
-      var NewConstructor
+      let NewConstructor
 
       beforeEach(function () {
         NewConstructor = testData.getConstructor(TestConstructor)
       })
 
       it('should create instances of itself', function () {
-        var instance = new NewConstructor()
+        const instance = new NewConstructor()
         expect(instance).to.be.an.instanceof(NewConstructor)
       })
 
@@ -194,7 +194,7 @@ describe('getSpy- and getStubConstructor', function () {
             instance.extraField = 7
             instance.returnSelf = sinon.stub().callsFake(() => instance)
           })
-          var instance = new NewConstructor()
+          const instance = new NewConstructor()
           expect(instance.extraField).to.equal(7)
           expect(instance.returnSelf().returnSelf()).to.equal(instance)
         })
@@ -214,9 +214,9 @@ describe('getSpy- and getStubConstructor', function () {
         })
 
         it('should be a list of instances with null for non-constructor calls', function () {
-          var instance1 = new NewConstructor()
+          const instance1 = new NewConstructor()
           NewConstructor()
-          var instance2 = new NewConstructor()
+          const instance2 = new NewConstructor()
 
           expect(NewConstructor.instances).to.deep.equal([instance1, null, instance2])
         })
@@ -224,7 +224,7 @@ describe('getSpy- and getStubConstructor', function () {
 
       describe('getInstance', function () {
         it('should return a single instance if one has been created', function () {
-          var instance = new NewConstructor()
+          const instance = new NewConstructor()
 
           expect(NewConstructor.getInstance()).to.equal(instance)
         })
@@ -242,7 +242,7 @@ describe('getSpy- and getStubConstructor', function () {
 
         it('should return an instance with a given index', function () {
           new NewConstructor()
-          var instance2 = new NewConstructor()
+          const instance2 = new NewConstructor()
 
           expect(NewConstructor.getInstance(1)).to.equal(instance2)
         })
