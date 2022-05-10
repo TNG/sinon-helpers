@@ -1,4 +1,4 @@
-name: Rekease
+name: Release
 
 on:
   push:
