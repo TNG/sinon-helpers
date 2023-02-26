@@ -1,5 +1,3 @@
-/* eslint-disable tree-shaking/no-side-effects-in-initialization */
-
 export default {
   input: "src/index.js",
   external: ["sinon"],
