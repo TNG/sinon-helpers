@@ -39,9 +39,9 @@ const getSpyConstructorProperties = (Target) => ({
 });
 
 export const getStubConstructor = /* @__PURE__ */ getStubOrSpyConstructor(
-  getStubConstructorProperties
+  getStubConstructorProperties,
 );
 
 export const getSpyConstructor = /* @__PURE__ */ getStubOrSpyConstructor(
-  getSpyConstructorProperties
+  getSpyConstructorProperties,
 );

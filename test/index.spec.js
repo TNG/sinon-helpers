@@ -203,7 +203,7 @@ describe("getSpy- and getStubConstructor", function () {
           expect(
             NewConstructor.withInit(function (instance) {
               instance.extraField = 7;
-            })
+            }),
           ).to.equal(NewConstructor);
         });
       });

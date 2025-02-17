@@ -22,14 +22,14 @@ const getInstanceIndexWithValidation = (index, numInstances) => {
     if (numInstances > 1) {
       throw new Error(
         "Tried to access only instance of StubConstructor, " +
-          `but there were ${numInstances} instances.`
+          `but there were ${numInstances} instances.`,
       );
     }
   }
   if (numInstances <= instanceIndex) {
     throw new Error(
       `Tried to access StubConstructor instance ${instanceIndex}, ` +
-        `but there were only ${numInstances} instances.`
+        `but there were only ${numInstances} instances.`,
     );
   }
   return instanceIndex;
@@ -49,7 +49,7 @@ export default /* tree-shaking no-side-effects-when-called */ (getConstructorPro
         Target &&
           applyToEachFunctionKeyInPrototypeChain(
             constructorProps.processMethodOfInstance(this),
-            constructorProps.getInstanceMethodNameSource(this)
+            constructorProps.getInstanceMethodNameSource(this),
           );
         init && init(this);
       } else {
@@ -69,7 +69,7 @@ export default /* tree-shaking no-side-effects-when-called */ (getConstructorPro
     StubOrSpyConstructor.getInstance = (index) => {
       const validatedIndex = getInstanceIndexWithValidation(
         index,
-        StubOrSpyConstructor.instances.length
+        StubOrSpyConstructor.instances.length,
       );
       return StubOrSpyConstructor.instances[validatedIndex];
     };
@@ -79,7 +79,7 @@ export default /* tree-shaking no-side-effects-when-called */ (getConstructorPro
     Target &&
       applyToEachFunctionKeyInObject(
         constructorProps.processMethodOfConstructor(StubOrSpyConstructor),
-        Target
+        Target,
       );
     return StubOrSpyConstructor;
   };
