@@ -52,7 +52,7 @@
     "build": "rollup -c",
     "test": "npm run build && mocha",
     "lint": "eslint --fix *.js src/**/*.js test/**/*.js",
-    "prepare": "husky install && npm run build",
+    "prepare": "husky && npm run build",
     "semantic-release": "semantic-release"
   },
   "version": "0.0.0-development"
