@@ -1,6 +1,3 @@
-/* eslint-env mocha */
-/* eslint-disable no-unused-expressions,no-new,tree-shaking/no-side-effects-in-initialization */
-
 const sinonHelpers = require("../dist/index");
 const getStubConstructor = sinonHelpers.getStubConstructor;
 const getSpyConstructor = sinonHelpers.getSpyConstructor;
